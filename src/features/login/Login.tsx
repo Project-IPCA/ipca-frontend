@@ -1,10 +1,4 @@
-import {
-  Button,
-  Card,
-  Input,
-  Spinner,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, Card, Input, Typography } from "@material-tailwind/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import { clearErrorState, getLoginState, loginUser } from "./redux/loginSlice";
@@ -73,7 +67,7 @@ function Login() {
 
   return (
     <div className="flex justify-center items-center w-screen h-screen">
-      <Card color="transparent" shadow={false}>
+      <Card className="p-6">
         <Typography variant="h4" color="blue-gray">
           Sign In
         </Typography>
@@ -118,8 +112,8 @@ function Login() {
             fullWidth
             type="submit"
             disabled={pendingLogin}
+            loading={pendingLogin}
           >
-            {pendingLogin && <Spinner className="h-4 w-4" />}
             sign in
           </Button>
         </form>

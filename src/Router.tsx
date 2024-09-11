@@ -10,6 +10,9 @@ import { AnonymousRoutes, ProtectedRoutes, SpinnerLoading } from "./components";
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const NotFoundPage = lazy(() => import("./pages/notFoundPage/NotFoundPage"));
+const SubmitCodePage = lazy(
+  () => import("./pages/submitCodePage/SubmitCodePage"),
+);
 
 const router = createBrowserRouter([
   {
@@ -36,6 +39,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<SpinnerLoading />}>
                 <HomePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/submit_code",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <SubmitCodePage />
               </Suspense>
             ),
           },
