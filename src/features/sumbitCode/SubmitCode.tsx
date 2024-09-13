@@ -1,8 +1,10 @@
 import CodeEditorCard from "./components/CodeEditorCard";
 import ProblemCard from "./components/ProblemCard";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import TestCaseCard from "./components/TestCaseCard";
 import TestCaseItem from "./components/TestCaseItem";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { getExercise } from "./redux/submitCodeSlice";
 
 const SubmitCode = () => {
   const [value, setValue] = useState<string>("");
@@ -13,6 +15,18 @@ const SubmitCode = () => {
   const onSubmitCode = () => {
     console.log(value);
   };
+
+  const initialized = useRef(false);
+  const dispatch = useAppDispatch();
+  const { data, isLoading, error } = useAppSelector((state) => state.exercise);
+
+  useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+      dispatch(getExercise());
+    }
+    return () => {};
+  }, [dispatch, data]);
 
   const mockTestCase = [
     {

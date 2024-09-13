@@ -6,12 +6,16 @@ import {
 } from "react-router-dom";
 import { Layout } from "./layout";
 import { AnonymousRoutes, ProtectedRoutes, SpinnerLoading } from "./components";
+import SubmitCodeLayout from "./layout/SubmitCodeLayout";
 
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const NotFoundPage = lazy(() => import("./pages/notFoundPage/NotFoundPage"));
 const SubmitCodePage = lazy(
   () => import("./pages/submitCodePage/SubmitCodePage"),
+);
+const ExerciseListPage = lazy(
+  () => import("./pages/exerciseListPage/ExerciseListPage"),
 );
 
 const router = createBrowserRouter([
@@ -42,6 +46,19 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: "/exercise",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <ExerciseListPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      {
+        element: <SubmitCodeLayout />,
+        children: [
           {
             path: "/submit_code",
             element: (
