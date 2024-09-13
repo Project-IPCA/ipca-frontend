@@ -14,31 +14,40 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { createElement, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navListMenuItems = [
     {
       title: "Instructions",
-      description: "Find the perfect solution for your needs.",
+      description: "ข้อแนะนำในการใช้งานเว็บไซต์",
       icon: BookOpenIcon,
+      path: "/instructions",
     },
     {
       title: "Examination",
-      description: "Meet and learn about our dedication",
+      description: "ข้อบังคับในการสอบปฎิบัติ",
       icon: AcademicCapIcon,
+      path: "/examination",
     },
     {
       title: "FAQ",
-      description: "Find the perfect solution for your needs.",
+      description: "คำถามทีพบบ่อยในการใช้งานเว็บไซต์",
       icon: ChatBubbleLeftRightIcon,
+      path: "/faq",
     },
   ];
 
+  const navigate = useNavigate();
+
   const renderItems = navListMenuItems.map(
-    ({ icon, title, description }, key) => (
-      <a href="#" key={key}>
-        <MenuItem className="flex items-center gap-3 rounded-lg">
+    ({ icon, title, description, path }, key) => (
+      <a key={key}>
+        <MenuItem
+          className="flex items-center gap-3 rounded-lg"
+          onClick={() => navigate(path)}
+        >
           <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
             {" "}
             {createElement(icon, {
@@ -70,7 +79,7 @@ function NavListMenu() {
     <>
       <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
         <MenuHandler>
-          <Typography as="a" href="#" variant="small" className="font-normal">
+          <Typography as="a" variant="small" className="font-normal">
             <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
               <LightBulbIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
               Instructions{" "}
