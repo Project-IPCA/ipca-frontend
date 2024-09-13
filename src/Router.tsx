@@ -17,6 +17,14 @@ const SubmitCodePage = lazy(
 const ExerciseListPage = lazy(
   () => import("./pages/exerciseListPage/ExerciseListPage"),
 );
+const FaqPage = lazy(() => import("./pages/faqPage/FaqPage"));
+
+const InstructionsPage = lazy(
+  () => import("./pages/instructionsPage/InstructionsPage"),
+);
+const ExaminationPage = lazy(
+  () => import("./pages/examinationPage/ExaminationPage"),
+);
 
 const router = createBrowserRouter([
   {
@@ -51,6 +59,30 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<SpinnerLoading />}>
                 <ExerciseListPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/faq",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <FaqPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/instructions",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <InstructionsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/examination",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <ExaminationPage />
               </Suspense>
             ),
           },
