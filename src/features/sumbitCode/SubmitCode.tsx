@@ -5,7 +5,6 @@ import TestCaseCard from "./components/TestCaseCard";
 import TestCaseItem from "./components/TestCaseItem";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import { getExercise } from "./redux/submitCodeSlice";
-import { Spinner } from "@material-tailwind/react";
 
 const SubmitCode = () => {
   const [value, setValue] = useState<string>("");
