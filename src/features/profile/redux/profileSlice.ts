@@ -28,7 +28,7 @@ interface Selected {
   departments: Dept[];
 }
 
-interface ProfileData {
+export interface ProfileData {
   profile: ProfileInfo;
   selected: Selected;
 }
