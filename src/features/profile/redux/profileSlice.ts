@@ -165,9 +165,8 @@ const profileSlice = createSlice({
         state.isUpdating = true;
         state.error = null;
       })
-      .addCase(updateProfile.fulfilled, (state, action) => {
+      .addCase(updateProfile.fulfilled, (state, _) => {
         state.isUpdating = false;
-        state.data.profile = action.payload.user_info;
         state.error = null;
       })
       .addCase(updateProfile.rejected, (state, action) => {
