@@ -34,13 +34,13 @@ function Login() {
       setPendingLogin(false);
       toast.error(loginState.error.error, {
         position: "bottom-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
+        theme: "light",
         transition: Bounce,
       });
 

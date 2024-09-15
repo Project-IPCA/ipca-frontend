@@ -25,6 +25,7 @@ const InstructionsPage = lazy(
 const ExaminationPage = lazy(
   () => import("./pages/examinationPage/ExaminationPage"),
 );
+const ProfilePage = lazy(() => import("./pages/profilePage/ProfilePage"));
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<SpinnerLoading />}>
                 <ExaminationPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/profile",
+            element: (
+              <Suspense fallback={<SpinnerLoading />}>
+                <ProfilePage />
               </Suspense>
             ),
           },
