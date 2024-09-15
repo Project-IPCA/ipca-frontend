@@ -16,7 +16,7 @@ import {
   getProfile,
   updateProfile,
 } from "./redux/profileSlice";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Bounce, toast } from "react-toastify";
 
 interface ProfileInfo {
@@ -38,8 +38,7 @@ function Profile() {
   const initialized = useRef(false);
   const dispatch = useAppDispatch();
   const { data, isUpdating, error } = useAppSelector((state) => state.profile);
-  const { register, handleSubmit, reset, setValue, control } =
-    useForm<ProfileInfo>();
+  const { register, handleSubmit, reset, setValue } = useForm<ProfileInfo>();
 
   const handleSelectChange = (value: string | undefined) => {
     if (value) {
@@ -113,6 +112,9 @@ function Profile() {
         transition: Bounce,
       });
     }
+    setValue("confirm_new_password", "");
+    setValue("current_password", "");
+    setValue("new_password", "");
   };
 
   return (
@@ -207,24 +209,6 @@ function Profile() {
                   </Option>
                 ))}
               </Select>
-              <Controller
-                name="dept_id"
-                control={control}
-                defaultValue={data.profile.dept.dept_id}
-                render={({ field }) => (
-                  <Select
-                    label="Department"
-                    value={data.profile.dept.dept_id}
-                    onChange={field.onChange}
-                  >
-                    {data.selected.departments.map((item) => (
-                      <Option key={item.dept_id} value={item.dept_id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              />
               <Input
                 crossOrigin=""
                 size="lg"

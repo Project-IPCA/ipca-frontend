@@ -14,26 +14,31 @@ import {
 } from "@material-tailwind/react";
 import { createElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/store";
+import { logout } from "../redux/layoutSlice";
+import { setLogoutState } from "../../features/login/redux/loginSlice";
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const profileMenuItems = [
     {
       label: "My Profile",
       icon: UserCircleIcon,
       path: "/profile",
-      next: () => {
-        console.log("hello");
-      },
+      next: () => {},
     },
     {
       label: "Sign Out",
       icon: PowerIcon,
       path: "/login",
-      next: () => {
-        console.log("hello");
+      next: async () => {
+        await dispatch(logout());
+        dispatch(setLogoutState());
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
       },
     },
   ];
