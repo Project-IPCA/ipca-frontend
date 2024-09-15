@@ -1,9 +1,6 @@
 import {
   ChevronDownIcon,
   UserCircleIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import {
@@ -16,34 +13,30 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { createElement, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const profileMenuItems = [
     {
       label: "My Profile",
       icon: UserCircleIcon,
-    },
-    {
-      label: "Edit Profile",
-      icon: Cog6ToothIcon,
-    },
-    {
-      label: "Inbox",
-      icon: InboxArrowDownIcon,
-    },
-    {
-      label: "Help",
-      icon: LifebuoyIcon,
+      path: "/profile",
+      next: () => {
+        console.log("hello");
+      },
     },
     {
       label: "Sign Out",
       icon: PowerIcon,
+      path: "/login",
+      next: () => {
+        console.log("hello");
+      },
     },
   ];
-
-  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -69,12 +62,16 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, path, next }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => {
+                next();
+                navigate(path);
+                setIsMenuOpen(false);
+              }}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
