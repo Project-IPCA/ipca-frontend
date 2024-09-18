@@ -127,3 +127,19 @@ export const EXAMINATION = [
   { desc: "ถ้าพบว่าทำการทุจริต จะลงโทษ ตามระเบียบของทางคณะวิศวกรรมศาสตร์" },
   { desc: "ให้เซนต์ชื่อก่อนสอบ และหลังสอบ" },
 ];
+
+export const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+export const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
