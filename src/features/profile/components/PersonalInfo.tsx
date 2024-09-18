@@ -1,13 +1,16 @@
 import { Input, Radio, Typography } from "@material-tailwind/react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { ProfileInfo } from "../Profile";
 import DatePicker from "./DatePicker";
+import { ProfileData } from "../redux/profileSlice";
 
 interface Props {
   register: UseFormRegister<ProfileInfo>;
+  setValue: UseFormSetValue<ProfileInfo>;
+  formData: ProfileData;
 }
 
-function PersonalInfo({ register }: Props) {
+function PersonalInfo({ register, setValue, formData }: Props) {
   return (
     <form className="mt-8 mb-2   space-y-5">
       <div className="flex lg:flex-row md:flex-col lg:gap-y-0 gap-y-5 gap-x-2 ">
@@ -36,7 +39,7 @@ function PersonalInfo({ register }: Props) {
           placeholder="Nickname"
           label="Nickname"
         />
-        <DatePicker />
+        <DatePicker setValue={setValue} formData={formData} />
       </div>
       <div>
         <Typography variant="h5">Gender</Typography>

@@ -19,7 +19,7 @@ interface ProfileInfo {
   tel: string;
 }
 
-interface Dept {
+export interface Dept {
   dept_id: string;
   name: string;
 }
@@ -165,8 +165,10 @@ const profileSlice = createSlice({
         state.isUpdating = true;
         state.error = null;
       })
-      .addCase(updateProfile.fulfilled, (state, _) => {
+      .addCase(updateProfile.fulfilled, (state, action) => {
         state.isUpdating = false;
+        state.data.profile = action.payload.user_info;
+        state.data.selected = action.payload.selected;
         state.error = null;
       })
       .addCase(updateProfile.rejected, (state, action) => {

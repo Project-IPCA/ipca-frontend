@@ -1,29 +1,48 @@
 import { Input, Select, Option } from "@material-tailwind/react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { ProfileInfo } from "../Profile";
-import { ProfileData } from "../redux/profileSlice";
+import { Dept, ProfileData } from "../redux/profileSlice";
+import { useEffect, useState } from "react";
 
 interface Props {
   register: UseFormRegister<ProfileInfo>;
-  handleSelectChange: (value: string | undefined) => void;
+  setValue: UseFormSetValue<ProfileInfo>;
   formData: ProfileData;
 }
 
-function Contact({ register, handleSelectChange, formData }: Props) {
+function Contact({ register, setValue, formData }: Props) {
+  const [selectedDept, setSelectedDept] = useState<string>();
+  const [depts, setDepts] = useState<Dept[]>();
+
+  useEffect(() => {
+    if (!depts && formData?.selected?.departments?.length > 0) {
+      setDepts(formData.selected.departments);
+    }
+    if (!selectedDept && formData?.profile?.dept?.dept_id) {
+      setSelectedDept(formData.profile.dept.dept_id);
+    }
+  }, [formData]);
+
+  useEffect(() => {
+    setValue("dept_id", selectedDept ? selectedDept : "");
+  }, [selectedDept]);
+
   return (
     <>
-      <Select
-        label="Department"
-        onChange={handleSelectChange}
-        value={formData.profile.dept.dept_id}
-        size="lg"
-      >
-        {formData.selected.departments.map((item, index) => (
-          <Option key={index} value={item.dept_id}>
-            {item.name}
-          </Option>
-        ))}
-      </Select>
+      {depts && (
+        <Select
+          label="Department"
+          onChange={(val) => setSelectedDept(val)}
+          value={selectedDept ? selectedDept : ""}
+          size="lg"
+        >
+          {depts.map((item, index) => (
+            <Option key={index} value={item.dept_id}>
+              {item.name}
+            </Option>
+          ))}
+        </Select>
+      )}
       <Input
         crossOrigin=""
         size="lg"

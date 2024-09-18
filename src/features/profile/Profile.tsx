@@ -34,12 +34,6 @@ function Profile() {
   const { data, isUpdating, error } = useAppSelector((state) => state.profile);
   const { register, handleSubmit, reset, setValue } = useForm<ProfileInfo>();
 
-  const handleSelectChange = (value: string | undefined) => {
-    if (value) {
-      setValue("dept_id", value);
-    }
-  };
-
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
@@ -80,7 +74,7 @@ function Profile() {
     const resultAction = await dispatch(
       updateProfile({
         avatar: data.avatar ? data.avatar : null,
-        dob: data.dob ? data.dob : null,
+        dob: data.dob ? data.dob.slice(0, 11) : null,
         email: data.email ? data.email : null,
         gender: data.gender ? data.gender : null,
         nickname: data.nickname ? data.nickname : null,
@@ -109,6 +103,7 @@ function Profile() {
     setValue("confirm_new_password", "");
     setValue("current_password", "");
     setValue("new_password", "");
+    console.log(data);
   };
 
   return (
@@ -120,7 +115,11 @@ function Profile() {
             <Typography variant="h4" color="blue-gray">
               Personal Information
             </Typography>
-            <PersonalInfo register={register} />
+            <PersonalInfo
+              register={register}
+              setValue={setValue}
+              formData={data}
+            />
           </Card>
           <div className="lg:h-full flex flex-col gap-y-5 md:w-1/2">
             <Card className="h-1/2 p-6 space-y-5">
@@ -129,7 +128,7 @@ function Profile() {
               </Typography>
               <Contact
                 register={register}
-                handleSelectChange={handleSelectChange}
+                setValue={setValue}
                 formData={data}
               />
             </Card>
