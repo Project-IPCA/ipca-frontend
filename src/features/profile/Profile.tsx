@@ -1,5 +1,5 @@
 import { Card, Input, Typography, Button } from "@material-tailwind/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import {
   clearProfileError,
@@ -33,6 +33,16 @@ function Profile() {
   const dispatch = useAppDispatch();
   const { data, isUpdating, error } = useAppSelector((state) => state.profile);
   const { register, handleSubmit, reset, setValue } = useForm<ProfileInfo>();
+  const [profileImage, setProfileImage] = useState<string>("");
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+
+  const handleImageChange = (image: string) => {
+    setProfileImage(image);
+  };
+
+  const handleFileChange = (file: File | null) => {
+    setProfileFile(file);
+  };
 
   useEffect(() => {
     if (!initialized.current) {
@@ -73,7 +83,7 @@ function Profile() {
   const onSubmit: SubmitHandler<ProfileInfo> = async (data) => {
     const resultAction = await dispatch(
       updateProfile({
-        avatar: data.avatar ? data.avatar : null,
+        avatar: profileFile ? profileFile : null,
         dob: data.dob ? data.dob.slice(0, 11) : null,
         email: data.email ? data.email : null,
         gender: data.gender ? data.gender : null,
@@ -103,7 +113,6 @@ function Profile() {
     setValue("confirm_new_password", "");
     setValue("current_password", "");
     setValue("new_password", "");
-    console.log(data);
   };
 
   return (
@@ -111,7 +120,12 @@ function Profile() {
       <div className="w-full">
         <div className=" w-full container mx-auto flex md:flex-row flex-col gap-5 max-w-5xl ">
           <Card className="md:w-1/2 p-6">
-            <ProfileImage />
+            <ProfileImage
+              formData={data}
+              profileImage={profileImage}
+              onImageChange={handleImageChange}
+              onFileChange={handleFileChange}
+            />
             <Typography variant="h4" color="blue-gray">
               Personal Information
             </Typography>
