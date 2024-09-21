@@ -97,7 +97,7 @@ export const updateProfile = createAsyncThunk(
       tel,
       dept_id,
     }: {
-      avatar: string | null;
+      avatar: File | null;
       confirm_new_password: string | null;
       current_password: string | null;
       dob: string | null;
@@ -112,10 +112,28 @@ export const updateProfile = createAsyncThunk(
   ) => {
     try {
       const token = getFreshAccessToken();
+      let avatarUrl: string | null = null;
+      if (avatar) {
+        const formData = new FormData();
+        formData.append("file", avatar);
+
+        const response = await axios.post(
+          `${VITE_IPCA_API}/common/user_profile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        avatarUrl = response.data.object_url;
+      }
       const response = await axios.put(
         `${VITE_IPCA_API}/common/user_info`,
         {
-          avatar: avatar,
+          avatar: avatarUrl ? avatarUrl : null,
           confirm_new_password: confirm_new_password,
           current_password: current_password,
           dob: dob,
