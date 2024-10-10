@@ -7,6 +7,8 @@ services:
       - "5174"
     networks:
       - ipca-stack
+    env_file:
+      - .env
 
 networks:
   ipca-stack:
