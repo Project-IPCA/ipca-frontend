@@ -1,0 +1,13 @@
+services:
+  ipca-frontend:
+    container_name: ipca-frontend
+    build: .
+    restart: on-failure
+    ports:
+      - "5174"
+    networks:
+      - ipca-stack
+
+networks:
+  ipca-stack:
+    external: true
