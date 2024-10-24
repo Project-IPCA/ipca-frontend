@@ -3,7 +3,7 @@ import PageContainer from "../PageContainer";
 
 function SubmitCodePage() {
   return (
-    <PageContainer>
+    <PageContainer submitCodePage={true}>
       <SubmitCode />
     </PageContainer>
   );

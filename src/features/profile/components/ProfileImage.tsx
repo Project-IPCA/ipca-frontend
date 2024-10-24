@@ -1,5 +1,5 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
-import { ProfileNone } from "../../../assets";
+import { profileNone } from "../../../assets";
 import { ProfileData } from "../redux/profileSlice";
 
 interface Props {
@@ -33,7 +33,7 @@ const ProfileImage = ({
       <div className="relative w-40 h-40">
         <img
           src={
-            profileImage ? profileImage : formData.profile.avatar || ProfileNone
+            profileImage ? profileImage : formData.profile.avatar || profileNone
           }
           alt="avatar"
           className="inline-block relative object-cover object-center rounded-full w-40 h-40"

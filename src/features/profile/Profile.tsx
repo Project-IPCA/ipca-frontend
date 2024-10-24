@@ -45,7 +45,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (!initialized.current && !data.profile.f_name) {
       initialized.current = true;
       dispatch(getProfile());
     }
@@ -119,7 +119,7 @@ function Profile() {
     <div className=" flex justify-center items-center ">
       <div className="w-full">
         <div className=" w-full container mx-auto flex md:flex-row flex-col gap-5 max-w-5xl ">
-          <Card className="md:w-1/2 p-6">
+          <Card className="md:w-1/2 p-6 border-[1px]">
             <ProfileImage
               formData={data}
               profileImage={profileImage}
@@ -136,7 +136,7 @@ function Profile() {
             />
           </Card>
           <div className="lg:h-full flex flex-col gap-y-5 md:w-1/2">
-            <Card className="h-1/2 p-6 space-y-5">
+            <Card className="h-1/2 p-6 space-y-5 border-[1px]">
               <Typography variant="h4" color="blue-gray">
                 Contact
               </Typography>
@@ -146,7 +146,7 @@ function Profile() {
                 formData={data}
               />
             </Card>
-            <Card className="h-1/2 p-6 space-y-5">
+            <Card className="h-1/2 p-6 space-y-5 border-[1px]">
               <Typography variant="h4" color="blue-gray">
                 Reset Password
               </Typography>
@@ -155,7 +155,7 @@ function Profile() {
           </div>
         </div>
         <div className=" w-full container mx-auto flex md:flex-row flex-col gap-5 max-w-5xl justify-end mt-5">
-          <div className="w-72">
+          <div className="lg:w-72">
             <Input
               crossOrigin=""
               size="lg"

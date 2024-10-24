@@ -1,10 +1,13 @@
-import Examination from "../../features/examination/Examination";
+import { InfoCard } from "../../components";
+import { EXAMINATION } from "../../constants/constants";
 import PageContainer from "../PageContainer";
 
 function ExaminationPage() {
   return (
     <PageContainer>
-      <Examination />
+      <div className="container mx-auto">
+        <InfoCard title={"การสอบปฏิบัติ"} infoList={EXAMINATION} />
+      </div>
     </PageContainer>
   );
 }

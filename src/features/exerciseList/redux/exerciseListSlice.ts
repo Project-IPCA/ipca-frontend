@@ -14,6 +14,7 @@ export interface ExerciseInfo {
   is_open: boolean;
   marking: number;
   name: string;
+  last_exercise_success: number;
 }
 
 interface ExerciseState {
@@ -70,8 +71,10 @@ const exerciseListSlice = createSlice({
 
 export const { clearExerciseListError } = exerciseListSlice.actions;
 
-export const getExerciseListState = (state: RootState) => state.profile.data;
+export const getExerciseListState = (state: RootState) =>
+  state.exerciseList.data;
 export const getExercciseListStatus = (state: RootState) =>
-  state.profile.isFetching;
-export const getExerciseListError = (state: RootState) => state.profile.error;
+  state.exerciseList.isFetching;
+export const getExerciseListError = (state: RootState) =>
+  state.exerciseList.error;
 export default exerciseListSlice.reducer;

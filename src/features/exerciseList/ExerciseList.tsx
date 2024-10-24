@@ -6,16 +6,19 @@ import { useEffect, useRef } from "react";
 import {
   clearExerciseListError,
   getExerciseList,
+  getExerciseListError,
+  getExerciseListState,
 } from "./redux/exerciseListSlice";
 import { Bounce, toast } from "react-toastify";
 
 const ExerciseList = () => {
   const initialized = useRef(false);
   const dispatch = useAppDispatch();
-  const { data, error } = useAppSelector((state) => state.exerciseList);
+  const data = useAppSelector(getExerciseListState);
+  const error = useAppSelector(getExerciseListError);
 
   useEffect(() => {
-    if (!initialized.current) {
+    if (!initialized.current && data.length <= 0) {
       initialized.current = true;
       dispatch(getExerciseList());
     }
@@ -38,8 +41,6 @@ const ExerciseList = () => {
       dispatch(clearExerciseListError());
     }
   }, [error, dispatch]);
-
-  console.log(data);
 
   return (
     <div>

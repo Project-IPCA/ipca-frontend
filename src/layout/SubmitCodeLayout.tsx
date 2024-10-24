@@ -4,13 +4,27 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ExerciseListDrawer, Logo, ProfileMenu } from "./components";
 import ExerciseMenu from "./components/ExerciseMenu";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
+import {
+  getProfile,
+  getProfileState,
+} from "../features/profile/redux/profileSlice";
 
 function SubmitCodeLayout() {
+  const dispatch = useAppDispatch();
+  const profile = useAppSelector(getProfileState);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  useEffect(() => {
+    if (!profile.profile.f_name) {
+      dispatch(getProfile());
+    }
+  }, [dispatch, profile]);
+
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const toggleDrawer = () => setIsDrawerOpen((cur) => !cur);
+  const handleCloseNav = () => setIsNavOpen(false);
 
   useEffect(() => {
     window.addEventListener(
@@ -30,7 +44,10 @@ function SubmitCodeLayout() {
           <Logo />
 
           <div className="hidden lg:block">
-            <ExerciseMenu toggleDrawer={toggleDrawer} />
+            <ExerciseMenu
+              toggleDrawer={toggleDrawer}
+              handleCloseNav={handleCloseNav}
+            />
           </div>
           <IconButton
             size="sm"
@@ -41,11 +58,13 @@ function SubmitCodeLayout() {
           >
             <Bars2Icon className="h-6 w-6" />
           </IconButton>
-
-          <ProfileMenu />
+          <ProfileMenu profileImage={profile.profile.avatar} />
         </div>
         <Collapse open={isNavOpen} className="overflow-scroll">
-          <ExerciseMenu toggleDrawer={toggleDrawer} />
+          <ExerciseMenu
+            toggleDrawer={toggleDrawer}
+            handleCloseNav={handleCloseNav}
+          />
         </Collapse>
       </Navbar>
       <Outlet />

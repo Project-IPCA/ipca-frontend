@@ -13,7 +13,7 @@ interface Props {
 function PersonalInfo({ register, setValue, formData }: Props) {
   return (
     <form className="mt-8 mb-2   space-y-5">
-      <div className="flex lg:flex-row md:flex-col lg:gap-y-0 gap-y-5 gap-x-2 ">
+      <div className="flex lg:flex-row flex-col lg:gap-y-0 gap-y-5 gap-x-2 ">
         <Input
           {...register("f_name")}
           crossOrigin=""

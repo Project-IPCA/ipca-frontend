@@ -16,7 +16,11 @@ import {
 import { createElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function NavListMenu() {
+interface Props {
+  handleCloseNav: () => void;
+}
+
+function NavListMenu({ handleCloseNav }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navListMenuItems = [
     {
@@ -46,7 +50,10 @@ function NavListMenu() {
       <a key={key}>
         <MenuItem
           className="flex items-center gap-3 rounded-lg"
-          onClick={() => navigate(path)}
+          onClick={() => {
+            navigate(path);
+            handleCloseNav();
+          }}
         >
           <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
             {" "}
