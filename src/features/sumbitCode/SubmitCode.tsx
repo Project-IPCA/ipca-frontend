@@ -1,84 +1,335 @@
 import CodeEditorCard from "./components/CodeEditorCard";
 import ProblemCard from "./components/ProblemCard";
-import { useCallback, useEffect, useRef, useState } from "react";
-import TestCaseCard from "./components/TestCaseCard";
-import TestCaseItem from "./components/TestCaseItem";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
-import { getExercise } from "./redux/submitCodeSlice";
+import {
+  getExercise,
+  getExerciseState,
+  submitExercise,
+  VITE_IPCA_RT,
+} from "./redux/submitCodeSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { SUBMISSION_STATUS } from "../../constants/constants";
+import { v4 as uuidv4 } from "uuid";
+import {
+  getSubmissionHistory,
+  getSubmissionHistoryState,
+} from "../submissionHistory/redux/submissionHistorySlice";
+import {
+  getChapterList,
+  getChapterListState,
+} from "../../layout/redux/submitCodeLayoutSlice";
+import { Bounce, toast } from "react-toastify";
+import {
+  getExerciseList,
+  getExerciseListState,
+} from "../exerciseList/redux/exerciseListSlice";
+import { STEPPER } from "./constants";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import {
+  getCodeDisplayState,
+  getCodeFromMinio,
+} from "../codeDisplay/redux/codeDisplaySlice";
+
+export interface SubmissionDetail {
+  attempt: number;
+  submissionId: string;
+}
 
 const SubmitCode = () => {
-  const [value, setValue] = useState<string>("");
-  const onChange = useCallback((val: string) => {
-    setValue(val);
-  }, []);
+  const dispatch = useAppDispatch();
+  const exerciseState = useAppSelector(getExerciseState);
+  const chapterList = useAppSelector(getChapterListState);
+  const allChapterList = useAppSelector(getExerciseListState);
+  const submissionHistoryState = useAppSelector(getSubmissionHistoryState);
+  const codeDisplay = useAppSelector(getCodeDisplayState);
+  const submissionInitialize = useRef(false);
+  const { chapter, problem } = useParams();
+  const [sourcecode, setSourcecode] = useState<string>("");
+  const [jobId, setJobId] = useState<string>();
+  const [submissionResult, setSubmissionResult] = useState<boolean>(false);
+  const [problemStepper, setProblemStepper] = useState<string>(STEPPER.problem);
+  const [submissionDetail, setSubmissionDetail] =
+    useState<SubmissionDetail | null>(null);
+  const navigate = useNavigate();
 
-  const onSubmitCode = () => {
-    console.log(value);
+  const exerciseKey = `${chapter}.${problem}`;
+  const exercise = exerciseState[exerciseKey]?.exercise || null;
+  const exerciseError = exerciseState[exerciseKey]?.error || null;
+
+  const submissionKey = `${chapter}.${problem}`;
+  const submissionHistory =
+    submissionHistoryState[submissionKey]?.submissionHistory || null;
+
+  const isSubmissionHistoryFetching =
+    submissionHistoryState[submissionKey]?.isFetching;
+
+  const lastSubmitCode =
+    submissionHistory && submissionHistory.length > 0
+      ? codeDisplay[
+          submissionHistory[submissionHistory.length - 1]?.SourcecodeFilename
+        ]?.code
+      : null;
+
+  const onProblemStepperChange = (step: string) => {
+    setProblemStepper(step);
   };
 
-  const initialized = useRef(false);
-  const dispatch = useAppDispatch();
-  const { data, isLoading, error } = useAppSelector((state) => state.exercise);
+  const onChangeSubmissionDetail = (submissionId: string, attempt: number) => {
+    setSubmissionDetail({
+      submissionId: submissionId,
+      attempt: attempt,
+    });
+  };
+
+  const onChange = useCallback((val: string) => {
+    setSourcecode(val);
+  }, []);
+
+  const sortedChapterList = useMemo(
+    () =>
+      [...chapterList].sort(
+        (a, b) => a.items[0]?.chapter_idx - b.items[0]?.chapter_idx,
+      ),
+    [chapterList],
+  );
+
+  const exerciseResult = useMemo(() => {
+    if (!chapter || !problem) return;
+    const chapterIndex = parseInt(String(chapter)) - 1;
+    const problemIndex = parseInt(String(problem)) - 1;
+
+    if (
+      chapterIndex >= 0 &&
+      chapterIndex < sortedChapterList.length &&
+      problemIndex >= 0 &&
+      problemIndex < sortedChapterList[chapterIndex].items.length
+    ) {
+      return sortedChapterList[chapterIndex].items[problemIndex];
+    }
+    return null;
+  }, [chapter, problem, sortedChapterList]);
+
+  const onSubmitCode = async () => {
+    const uuid = uuidv4();
+    dispatch(
+      submitExercise({
+        chapter_id: exercise?.chapter_id ? exercise?.chapter_id : null,
+        item_id: problem ? parseInt(problem) : null,
+        sourcecode: sourcecode,
+        job_id: uuid,
+      }),
+    );
+    setJobId(uuid);
+  };
 
   useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      dispatch(getExercise());
+    if (allChapterList.length <= 0) {
+      dispatch(getExerciseList());
     }
-    return () => {};
-  }, [dispatch, data]);
+  }, [dispatch, allChapterList]);
 
-  const mockTestCase = [
-    {
-      isHidden: false,
-      isCorrect: true,
-      userOutput: "1",
-      answerOutput: "1",
-      testcaseNo: 1,
-      testcaseAmount: 4,
-    },
-    {
-      isHidden: false,
-      isCorrect: false,
-      userOutput: "2",
-      answerOutput: "3",
-      testcaseNo: 2,
-      testcaseAmount: 4,
-    },
-    {
-      isHidden: true,
-      isCorrect: true,
-      userOutput: "3",
-      answerOutput: "5",
-      testcaseNo: 3,
-      testcaseAmount: 4,
-    },
-    {
-      isHidden: true,
-      isCorrect: false,
-      userOutput: "4",
-      answerOutput: "12",
-      testcaseNo: 4,
-      testcaseAmount: 4,
-    },
-  ];
+  useEffect(() => {
+    if (exerciseError && allChapterList && allChapterList.length > 0) {
+      toast.error(exerciseError.error, {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      for (const chapter of allChapterList) {
+        if (chapter.is_open && chapter.last_exercise_success !== 5) {
+          navigate(
+            `/exercise/${chapter.index}/${chapter.last_exercise_success}`,
+          );
+          break;
+        }
+      }
+    }
+  }, [exerciseError, allChapterList]);
+
+  useEffect(() => {
+    if (jobId) {
+      const evtSource = new EventSource(
+        `${VITE_IPCA_RT}/submission-result/${jobId}`,
+      );
+      evtSource.onmessage = (event) => {
+        if (event.data) {
+          setSubmissionResult(true);
+          dispatch(
+            getSubmissionHistory({
+              chapter_id: exercise?.chapter_id || "",
+              chapter_idx: chapter ? chapter : "",
+              item_id: problem ? problem : "",
+              stu_id: "d506e51c-e0de-4d05-9421-8144bef44e71",
+            }),
+          );
+          dispatch(getChapterList());
+        }
+      };
+    }
+  }, [jobId]);
+
+  useEffect(() => {
+    if (submissionResult && submissionHistory && submissionHistory.length > 0) {
+      const lastResult = submissionHistory[submissionHistory.length - 1];
+      if (lastResult.Status === SUBMISSION_STATUS.accepted) {
+        toast.success("Great!, Correct answer.", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      } else if (lastResult.Status === SUBMISSION_STATUS.wrongAnswer) {
+        toast.error("Try again!, Wrong answer", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      } else if (lastResult.Status === SUBMISSION_STATUS.error) {
+        toast.error("Oops!, Double check your syntax", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+      setSubmissionResult(false);
+      setSubmissionDetail({
+        attempt: submissionHistory.length,
+        submissionId:
+          submissionHistory[submissionHistory.length - 1].SubmissionID,
+      });
+    }
+  }, [submissionResult, submissionHistory]);
+
+  useEffect(() => {
+    if (submissionDetail) {
+      setProblemStepper(STEPPER.result);
+    }
+  }, [submissionDetail]);
+
+  useEffect(() => {
+    dispatch(
+      getExercise({
+        chapter_idx: chapter ? chapter : "",
+        item_id: problem ? problem : "",
+      }),
+    );
+    setProblemStepper(STEPPER.problem);
+  }, [dispatch, chapter, problem]);
+
+  useEffect(() => {
+    if (exercise?.chapter_id && !submissionInitialize.current) {
+      dispatch(
+        getSubmissionHistory({
+          chapter_id: exercise?.chapter_id,
+          chapter_idx: chapter ? chapter : "",
+          item_id: problem ? problem : "",
+          stu_id: "d506e51c-e0de-4d05-9421-8144bef44e71",
+        }),
+      );
+    }
+  }, [dispatch, chapter, problem, exercise]);
+
+  useEffect(() => {
+    if (
+      submissionHistory &&
+      submissionHistory.length > 0 &&
+      !codeDisplay[
+        submissionHistory[submissionHistory.length - 1]?.SourcecodeFilename
+      ]
+    )
+      dispatch(
+        getCodeFromMinio(
+          submissionHistory[submissionHistory.length - 1].SourcecodeFilename,
+        ),
+      );
+  }, [dispatch, submissionHistory, codeDisplay]);
 
   return (
     <>
-      <div className="w-full  md:flex md:flex-row flex-col md:gap-x-5 md:space-y-0 space-y-3  md:h-[750px] ">
-        <ProblemCard />
+      <div className="w-full h-full lg:block hidden">
+        <PanelGroup direction="horizontal">
+          <Panel minSize={40}>
+            <ProblemCard
+              name={exercise?.name}
+              content={exercise?.content}
+              marking={exerciseResult?.marking}
+              fullMark={exerciseResult?.full_mark}
+              testcaseList={exercise?.testcase_list}
+              chapterId={exercise?.chapter_id}
+              stepper={problemStepper}
+              onStepperChange={onProblemStepperChange}
+              submissionDetail={submissionDetail}
+              onChangeSubmissionDetail={onChangeSubmissionDetail}
+            />
+          </Panel>
+
+          <PanelResizeHandle className="flex w-3 items-center justify-center bg-white p-0 group">
+            <div className="h-5 border-l-2 border-gray-300 rounded-full group-hover:h-full group-hover:border-l-4 group-hover:border-blue-400 group-hover:border-0 group-hover:cursor-ew-resize"></div>
+          </PanelResizeHandle>
+          <Panel minSize={25}>
+            <CodeEditorCard
+              sourcecode={sourcecode}
+              lastSubmitSourcecode={lastSubmitCode}
+              onChange={onChange}
+              onSubmitCode={onSubmitCode}
+              isSubmissionHistoryFetching={
+                isSubmissionHistoryFetching && submissionResult
+              }
+              isExerciseExist={!!exercise}
+              canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
+            />
+          </Panel>
+        </PanelGroup>
+      </div>
+      <div className="lg:hidden  w-full  flex flex-col gap-y-4">
+        <ProblemCard
+          name={exercise?.name}
+          content={exercise?.content}
+          marking={exerciseResult?.marking}
+          fullMark={exerciseResult?.full_mark}
+          testcaseList={exercise?.testcase_list}
+          chapterId={exercise?.chapter_id}
+          stepper={problemStepper}
+          onStepperChange={onProblemStepperChange}
+          submissionDetail={submissionDetail}
+          onChangeSubmissionDetail={onChangeSubmissionDetail}
+        />
         <CodeEditorCard
-          value={value}
+          sourcecode={sourcecode}
+          lastSubmitSourcecode={lastSubmitCode}
           onChange={onChange}
           onSubmitCode={onSubmitCode}
+          isSubmissionHistoryFetching={
+            isSubmissionHistoryFetching && submissionResult
+          }
+          isExerciseExist={!!exercise}
+          canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
         />
-      </div>
-      <div className="w-full pt-4">
-        <TestCaseCard>
-          {mockTestCase.map((item, index) => (
-            <TestCaseItem key={index} {...item} />
-          ))}
-        </TestCaseCard>
       </div>
     </>
   );

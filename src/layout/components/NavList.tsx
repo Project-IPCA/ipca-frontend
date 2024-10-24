@@ -4,13 +4,17 @@ import { createElement } from "react";
 import { CodeBracketIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 
-function NavList() {
+interface Props {
+  handleCloseNav: () => void;
+}
+
+function NavList({ handleCloseNav }: Props) {
   const navigate = useNavigate();
   const navListItems = [
     {
       label: "Exercise",
       icon: CodeBracketIcon,
-      path: "/exercise",
+      path: "/exercises",
     },
   ];
   return (
@@ -22,7 +26,10 @@ function NavList() {
           variant="small"
           color="gray"
           className="font-medium text-blue-gray-500"
-          onClick={() => navigate(path)}
+          onClick={() => {
+            navigate(path);
+            handleCloseNav();
+          }}
         >
           <MenuItem className="flex items-center gap-2 lg:rounded-full">
             {createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
@@ -30,7 +37,7 @@ function NavList() {
           </MenuItem>
         </Typography>
       ))}
-      <NavListMenu />
+      <NavListMenu handleCloseNav={handleCloseNav} />
     </ul>
   );
 }

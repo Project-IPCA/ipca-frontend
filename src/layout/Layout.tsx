@@ -4,11 +4,25 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavList from "./components/NavList";
 import { Logo, ProfileMenu } from "./components";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
+import {
+  getProfile,
+  getProfileState,
+} from "../features/profile/redux/profileSlice";
 
 function Layout() {
+  const dispatch = useAppDispatch();
+  const profile = useAppSelector(getProfileState);
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+  const handleCloseNav = () => setIsNavOpen(false);
+
+  useEffect(() => {
+    if (!profile.profile.f_name) {
+      dispatch(getProfile());
+    }
+  }, [dispatch, profile]);
 
   useEffect(() => {
     window.addEventListener(
@@ -23,7 +37,7 @@ function Layout() {
         <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
           <Logo />
           <div className="hidden lg:block">
-            <NavList />
+            <NavList handleCloseNav={handleCloseNav} />
           </div>
           <IconButton
             size="sm"
@@ -35,10 +49,10 @@ function Layout() {
             <Bars2Icon className="h-6 w-6" />
           </IconButton>
 
-          <ProfileMenu />
+          <ProfileMenu profileImage={profile.profile.avatar} />
         </div>
         <Collapse open={isNavOpen} className="overflow-scroll">
-          <NavList />
+          <NavList handleCloseNav={handleCloseNav} />
         </Collapse>
       </Navbar>
       <Outlet />

@@ -56,7 +56,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "/exercise",
+            path: "/exercises",
             element: (
               <Suspense fallback={<SpinnerLoading />}>
                 <ExerciseListPage />
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
         element: <SubmitCodeLayout />,
         children: [
           {
-            path: "/submit_code",
+            path: "/exercise/:chapter/:problem",
             element: (
               <Suspense fallback={<SpinnerLoading />}>
                 <SubmitCodePage />
