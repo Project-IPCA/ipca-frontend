@@ -160,4 +160,5 @@ export const SUBMISSION_STATUS = {
   accepted: "ACCEPTED",
   error: "ERROR",
   pending: "PENDING",
+  rejected: "REJECTED",
 };

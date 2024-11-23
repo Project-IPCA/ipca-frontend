@@ -71,6 +71,8 @@ function SubmissionHistory({
         return "Error";
       case SUBMISSION_STATUS.pending:
         return "Pending";
+      case SUBMISSION_STATUS.rejected:
+        return "Rejected";
       default:
         return "Not Valid";
     }
@@ -210,7 +212,9 @@ function SubmissionHistory({
               <Typography variant="h6" className="mb-2">
                 Result
               </Typography>
-              {submission?.status !== SUBMISSION_STATUS.error &&
+              {(submission?.status === SUBMISSION_STATUS.accepted ||
+                submission?.status === SUBMISSION_STATUS.wrongAnswer ||
+                submission?.status === SUBMISSION_STATUS.rejected) &&
                 submissionResult.map((result, index) => (
                   <TestCaseResult
                     key={result.testcase_no}
@@ -220,6 +224,9 @@ function SubmissionHistory({
                 ))}
               {submission?.status === SUBMISSION_STATUS.error && (
                 <TestCaseOutput output={submission.error_message || ""} />
+              )}
+              {submission?.status === SUBMISSION_STATUS.pending && (
+                <TestCaseOutput output={"Run time has rejected"} />
               )}
             </div>
           </div>
