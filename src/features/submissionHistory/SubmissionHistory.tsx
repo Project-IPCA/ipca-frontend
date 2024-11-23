@@ -47,15 +47,15 @@ function SubmissionHistory({
   const submission =
     submissionHistory && submissionHistory.length > 0
       ? submissionHistory.find(
-          (sub) => sub.SubmissionID === submissionDetail?.submissionId,
+          (sub) => sub.submission_id === submissionDetail?.submissionId,
         )
       : null;
 
   const submissionResult: SubmissionResult[] =
-    submission && submission.Result ? JSON.parse(submission.Result) : null;
+    submission && submission.result ? JSON.parse(submission.result) : null;
 
   const getStatusColor = () => {
-    if (submission?.Status === SUBMISSION_STATUS.accepted) {
+    if (submission?.status === SUBMISSION_STATUS.accepted) {
       return "green";
     }
     return "red";
@@ -106,16 +106,16 @@ function SubmissionHistory({
                 .reverse()
                 .map(
                   (
-                    { SubmissionID, Status, TimeSubmit, Marking },
+                    { submission_id, status, time_submit, marking },
                     index,
                     arr,
                   ) => (
                     <tr
-                      key={SubmissionID}
+                      key={submission_id}
                       className="even:bg-blue-gray-50/50 hover:bg-blue-gray-50 cursor-pointer"
                       onClick={() => {
                         onChangeSubmissionDetail(
-                          SubmissionID,
+                          submission_id,
                           arr.length - index,
                         );
                         onStepperChange(STEPPER.result);
@@ -134,13 +134,13 @@ function SubmissionHistory({
                         <Typography
                           variant="small"
                           color={
-                            Status === SUBMISSION_STATUS.accepted
+                            status === SUBMISSION_STATUS.accepted
                               ? "green"
                               : "red"
                           }
                           className="font-normal"
                         >
-                          {convertStatus(Status)}
+                          {convertStatus(status)}
                         </Typography>
                       </td>
                       <td className="p-4">
@@ -149,7 +149,7 @@ function SubmissionHistory({
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {Marking}
+                          {marking}
                         </Typography>
                       </td>
                       <td className="p-4">
@@ -158,7 +158,7 @@ function SubmissionHistory({
                           color="blue-gray"
                           className="font-medium"
                         >
-                          {format(TimeSubmit, "MMM dd, yyyy HH:mm:ss")}
+                          {format(time_submit, "MMM dd, yyyy HH:mm:ss")}
                         </Typography>
                       </td>
                     </tr>
@@ -183,20 +183,20 @@ function SubmissionHistory({
             <div className="flex justify-between items-center pt-6">
               <div className="flex items-center gap-2">
                 <Chip
-                  value={convertStatus(String(submission?.Status))}
+                  value={convertStatus(String(submission?.status))}
                   color={getStatusColor()}
                   className="rounded-full"
                 />
                 <Typography variant="small">
                   Submitted at{" "}
                   {format(
-                    String(submission?.TimeSubmit),
+                    String(submission?.time_submit),
                     "MMM dd, yyyy HH:mm:ss",
                   )}
                 </Typography>
               </div>
               <Chip
-                value={`${submission?.Marking}/2`}
+                value={`${submission?.marking}/2`}
                 color={getStatusColor()}
               />
             </div>
@@ -204,13 +204,13 @@ function SubmissionHistory({
               <Typography variant="h6" className="mb-2">
                 Sourcecode
               </Typography>
-              <CodeDisplay fileName={String(submission?.SourcecodeFilename)} />
+              <CodeDisplay fileName={String(submission?.sourcecode_filename)} />
             </div>
             <div className="pt-4">
               <Typography variant="h6" className="mb-2">
                 Result
               </Typography>
-              {submission?.Status !== SUBMISSION_STATUS.error &&
+              {submission?.status !== SUBMISSION_STATUS.error &&
                 submissionResult.map((result, index) => (
                   <TestCaseResult
                     key={result.testcase_no}
@@ -218,8 +218,8 @@ function SubmissionHistory({
                     index={index}
                   />
                 ))}
-              {submission?.Status === SUBMISSION_STATUS.error && (
-                <TestCaseOutput output={submission.ErrorMessage || ""} />
+              {submission?.status === SUBMISSION_STATUS.error && (
+                <TestCaseOutput output={submission.error_message || ""} />
               )}
             </div>
           </div>

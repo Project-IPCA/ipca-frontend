@@ -6,24 +6,22 @@ import { resolveApiError } from "../../../utils/function";
 import { RootState } from "../../../store/store";
 
 interface GetSubmissionParams {
-  stu_id: string | null;
-  chapter_id: string | null;
   chapter_idx: string | null;
   item_id: string | null;
 }
 
 export interface SubmissionHistory {
-  SubmissionID: string;
-  StuID: string;
-  ExerciseID: string;
-  Status: string;
-  SourcecodeFilename: string;
-  Marking: number;
-  TimeSubmit: string;
-  IsInfLoop: boolean;
-  Output: string | null;
-  Result: string;
-  ErrorMessage: string | null;
+  exercise_id: string;
+  is_loop: boolean;
+  marking: number;
+  output: string | null;
+  result: string;
+  sourcecode_filename: string;
+  status: string;
+  stu_id: string;
+  submission_id: string;
+  time_submit: string;
+  error_message: string;
 }
 
 interface SubmissionHistoryState {
@@ -39,7 +37,7 @@ const initialState: {
 export const getSubmissionHistory = createAsyncThunk(
   "submitCode/getSubmissionHistory",
   async (
-    { chapter_id, item_id, stu_id }: GetSubmissionParams,
+    { chapter_idx, item_id }: GetSubmissionParams,
     { rejectWithValue },
   ) => {
     try {
@@ -48,8 +46,7 @@ export const getSubmissionHistory = createAsyncThunk(
         `${VITE_IPCA_API}/common/student_submission`,
         {
           params: {
-            stu_id: stu_id,
-            chapter_id: chapter_id,
+            chapter_idx: chapter_idx,
             item_id: item_id,
           },
           headers: {
