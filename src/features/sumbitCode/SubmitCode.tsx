@@ -67,7 +67,7 @@ const SubmitCode = () => {
   const lastSubmitCode =
     submissionHistory && submissionHistory.length > 0
       ? codeDisplay[
-          submissionHistory[submissionHistory.length - 1]?.SourcecodeFilename
+          submissionHistory[submissionHistory.length - 1]?.sourcecode_filename
         ]?.code
       : null;
 
@@ -163,10 +163,8 @@ const SubmitCode = () => {
           setSubmissionResult(true);
           dispatch(
             getSubmissionHistory({
-              chapter_id: exercise?.chapter_id || "",
               chapter_idx: chapter ? chapter : "",
               item_id: problem ? problem : "",
-              stu_id: "d506e51c-e0de-4d05-9421-8144bef44e71",
             }),
           );
           dispatch(getChapterList());
@@ -178,7 +176,7 @@ const SubmitCode = () => {
   useEffect(() => {
     if (submissionResult && submissionHistory && submissionHistory.length > 0) {
       const lastResult = submissionHistory[submissionHistory.length - 1];
-      if (lastResult.Status === SUBMISSION_STATUS.accepted) {
+      if (lastResult.status === SUBMISSION_STATUS.accepted) {
         toast.success("Great!, Correct answer.", {
           position: "bottom-right",
           autoClose: 3000,
@@ -190,7 +188,7 @@ const SubmitCode = () => {
           theme: "light",
           transition: Bounce,
         });
-      } else if (lastResult.Status === SUBMISSION_STATUS.wrongAnswer) {
+      } else if (lastResult.status === SUBMISSION_STATUS.wrongAnswer) {
         toast.error("Try again!, Wrong answer", {
           position: "bottom-right",
           autoClose: 3000,
@@ -202,7 +200,7 @@ const SubmitCode = () => {
           theme: "light",
           transition: Bounce,
         });
-      } else if (lastResult.Status === SUBMISSION_STATUS.error) {
+      } else if (lastResult.status === SUBMISSION_STATUS.error) {
         toast.error("Oops!, Double check your syntax", {
           position: "bottom-right",
           autoClose: 3000,
@@ -220,7 +218,7 @@ const SubmitCode = () => {
       setSubmissionDetail({
         attempt: submissionHistory.length,
         submissionId:
-          submissionHistory[submissionHistory.length - 1].SubmissionID,
+          submissionHistory[submissionHistory.length - 1].submission_id,
       });
     }
   }, [submissionResult, submissionHistory]);
@@ -245,10 +243,8 @@ const SubmitCode = () => {
     if (exercise?.chapter_id && !submissionInitialize.current) {
       dispatch(
         getSubmissionHistory({
-          chapter_id: exercise?.chapter_id,
           chapter_idx: chapter ? chapter : "",
           item_id: problem ? problem : "",
-          stu_id: "d506e51c-e0de-4d05-9421-8144bef44e71",
         }),
       );
     }
@@ -259,12 +255,12 @@ const SubmitCode = () => {
       submissionHistory &&
       submissionHistory.length > 0 &&
       !codeDisplay[
-        submissionHistory[submissionHistory.length - 1]?.SourcecodeFilename
+        submissionHistory[submissionHistory.length - 1]?.sourcecode_filename
       ]
     )
       dispatch(
         getCodeFromMinio(
-          submissionHistory[submissionHistory.length - 1].SourcecodeFilename,
+          submissionHistory[submissionHistory.length - 1].sourcecode_filename,
         ),
       );
   }, [dispatch, submissionHistory, codeDisplay]);
