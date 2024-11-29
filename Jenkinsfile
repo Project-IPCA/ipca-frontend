@@ -6,14 +6,16 @@ pipeline {
                 skipDefaultCheckout()
             }
             steps {
-                if (env.BRANCH_NAME == 'master') {
-                    agent_label = 'master-agent'
-                    docker_compose_file = 'docker-compose.prod.yml'
-                } else if (env.BRANCH_NAME == 'develop') {
-                    agent_label = 'built-in' // Use built-in node
-                    docker_compose_file = 'docker-compose.dev.yml'
-                } else {
-                    error "Branch ${env.BRANCH_NAME} is not configured!"
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        agent_label = 'master-agent'
+                        docker_compose_file = 'docker-compose.prod.yml'
+                    } else if (env.BRANCH_NAME == 'develop') {
+                        agent_label = 'built-in' // Use built-in node
+                        docker_compose_file = 'docker-compose.dev.yml'
+                    } else {
+                        error "Branch ${env.BRANCH_NAME} is not configured!"
+                    }
                 }
             }
         }
