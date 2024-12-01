@@ -29,6 +29,7 @@ pipeline {
                     sh "cat ${env_file} > .env"
 
                     sh "cat .env"
+                    sh "echo agent_label: ${agent_label}, docker_compose_file: ${docker_compose_file}"
                     // Start services
                     sh "docker compose -f ${docker_compose_file} up -d --build"
                 }
