@@ -7,7 +7,7 @@ pipeline {
             }
             steps {
                 script {
-                    printenv
+                    sh 'printenv'
                     if (env.BRANCH_NAME == 'master') {
                         agent_label = 'master-agent'
                         docker_compose_file = 'docker-compose.prod.yml'
