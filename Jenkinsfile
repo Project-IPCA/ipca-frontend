@@ -2,12 +2,11 @@ pipeline {
     agent none
     stages {
         stage('Setup Environment') {
-            options {
-                skipDefaultCheckout()
-            }
             steps {
                 script {
-                    sh 'printenv'
+                    env.getEnvironment().each { key, value ->
+                        echo "${key}: ${value}"
+                    }
                     if (env.BRANCH_NAME == 'master') {
                         agent_label = 'master-agent'
                         docker_compose_file = 'docker-compose.prod.yml'
