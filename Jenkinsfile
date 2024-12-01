@@ -7,6 +7,8 @@ pipeline {
             }
             steps {
                 script {
+                    echo "Environment: ${env}"
+                    echo "Branch: ${env.GIT_BRANCH}"
                     if (env.BRANCH_NAME == 'master') {
                         agent_label = 'master-agent'
                         docker_compose_file = 'docker-compose.prod.yml'
