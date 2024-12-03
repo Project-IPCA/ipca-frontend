@@ -5,6 +5,7 @@ services:
     restart: on-failure
     networks:
       - ipca-stack
+      - tunnel
     env_file:
       - .env
 
