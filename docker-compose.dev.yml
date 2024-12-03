@@ -5,12 +5,9 @@ services:
     restart: on-failure
     networks:
       - ipca-stack
-      - tunnel
     env_file:
       - .env
 
 networks:
   ipca-stack:
-    external: true
-  tunnel:
     external: true
