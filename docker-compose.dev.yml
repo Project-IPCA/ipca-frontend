@@ -12,3 +12,5 @@ services:
 networks:
   ipca-stack:
     external: true
+  tunnel:
+    external: true
