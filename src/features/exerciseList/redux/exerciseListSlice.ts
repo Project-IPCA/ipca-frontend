@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_ERROR_RESPONSE } from "../../../constants/constants";
-import { getFreshAccessToken } from "../../../utils/service";
-import axios from "axios";
 import { resolveApiError } from "../../../utils/function";
 import { RootState } from "../../../store/store";
-
-const VITE_IPCA_API = import.meta.env.VITE_IPCA_API;
+import axiosInstance from "../../../utils/axios";
 
 export interface ExerciseInfo {
   chapter_id: string;
@@ -33,17 +30,12 @@ export const getExerciseList = createAsyncThunk(
   "exercise/getExerciseList",
   async (_, { rejectWithValue }) => {
     try {
-      const token = getFreshAccessToken();
-      const response = await axios.get(`${VITE_IPCA_API}/student/all_chapter`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstance.get("/student/all_chapter");
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const exerciseListSlice = createSlice({
