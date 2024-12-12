@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { resolveApiError } from "../../../utils/function";
 import { API_ERROR_RESPONSE } from "../../../constants/constants";
 import { RootState } from "../../../store/store";
+import axiosInstance from "../../../utils/axios";
 
-const VITE_IPCA_API = import.meta.env.VITE_IPCA_API;
 export const VITE_IPCA_RT = import.meta.env.VITE_IPCA_RT;
 
 interface Params {
@@ -55,18 +54,14 @@ export const getExercise = createAsyncThunk(
   "submitCode/getExercise",
   async ({ chapter_idx, item_id }: Params, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("access_token");
       const params = {
         chapter_idx: chapter_idx,
         item_id: item_id,
       };
-      const response = await axios.get(
-        `${VITE_IPCA_API}/student/assigned_exercise`,
+      const response = await axiosInstance.get(
+        `/student/assigned_exercise`,
         {
           params: params,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         },
       );
       return response.data;
@@ -83,20 +78,14 @@ export const submitExercise = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const token = localStorage.getItem("access_token");
-      const response = await axios.post(
-        `${VITE_IPCA_API}/student/exercise_submit`,
+      const response = await axiosInstance.post(
+        `/student/exercise_submit`,
         {
           item_id: item_id,
           chapter_id: chapter_id,
           sourcecode: sourcecode,
           job_id: job_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        }
       );
       return response.data;
     } catch (error) {

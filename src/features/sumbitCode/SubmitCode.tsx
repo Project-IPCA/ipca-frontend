@@ -168,6 +168,7 @@ const SubmitCode = () => {
             }),
           );
           dispatch(getChapterList());
+          dispatch(getExerciseList())
         }
       };
     }

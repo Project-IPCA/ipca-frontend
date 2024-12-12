@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_ERROR_RESPONSE } from "../../constants/constants";
-import { getFreshAccessToken } from "../../utils/service";
-import axios from "axios";
 import { resolveApiError } from "../../utils/function";
 import { RootState } from "../../store/store";
-
-const VITE_IPCA_API = import.meta.env.VITE_IPCA_API;
+import axiosInstance from "../../utils/axios";
 
 interface ChapterItem {
   chapter_idx: number;
@@ -53,20 +50,12 @@ export const getChapterList = createAsyncThunk(
   "submitCodeLayout/getChapterList",
   async (_, { rejectWithValue }) => {
     try {
-      const token = getFreshAccessToken();
-      const response = await axios.get(
-        `${VITE_IPCA_API}/student/chapter_list`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await axiosInstance.get(`/student/chapter_list`);
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const chapterListSlice = createSlice({

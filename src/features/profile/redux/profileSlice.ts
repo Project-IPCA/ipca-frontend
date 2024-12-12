@@ -1,13 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_ERROR_RESPONSE } from "../../../constants/constants";
-import { getFreshAccessToken } from "../../../utils/service";
-import axios from "axios";
 import { resolveApiError } from "../../../utils/function";
 import { RootState } from "../../../store/store";
+import axiosInstance from "../../../utils/axios";
 
 const VITE_IPCA_API = import.meta.env.VITE_IPCA_API;
 
+interface GroupDetail {
+  group_id: string;
+  name: string;
+  number: number | null;
+  day: string;
+  time_start: string;
+  time_end: string;
+  year: number;
+  semester: number;
+  instructor: string;
+}
+
 interface ProfileInfo {
+  user_id: string;
   avatar: string;
   dept: Dept;
   dob: string;
@@ -17,6 +29,8 @@ interface ProfileInfo {
   l_name: string;
   nickname: string;
   tel: string;
+  kmitl_id: string;
+  group_info: GroupDetail | null;
 }
 
 export interface Dept {
@@ -43,6 +57,7 @@ interface ProfileState {
 const initialState: ProfileState = {
   data: {
     profile: {
+      user_id: "",
       avatar: "",
       dept: {
         dept_id: "",
@@ -55,6 +70,8 @@ const initialState: ProfileState = {
       l_name: "",
       nickname: "",
       tel: "",
+      kmitl_id: "",
+      group_info: null,
     },
     selected: {
       departments: [],
@@ -69,17 +86,12 @@ export const getProfile = createAsyncThunk(
   "profile/getProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const token = getFreshAccessToken();
-      const response = await axios.get(`${VITE_IPCA_API}/common/user_info`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstance.get("/common/user_info");
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 export const updateProfile = createAsyncThunk(
@@ -108,53 +120,43 @@ export const updateProfile = createAsyncThunk(
       tel: string | null;
       dept_id: string | null;
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
-      const token = getFreshAccessToken();
       let avatarUrl: string | null = null;
       if (avatar) {
         const formData = new FormData();
         formData.append("file", avatar);
 
-        const response = await axios.post(
-          `${VITE_IPCA_API}/common/user_profile`,
+        const response = await axiosInstance.post(
+          "/common/user_profile",
           formData,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
               "Content-Type": "multipart/form-data",
             },
-          },
+          }
         );
 
         avatarUrl = response.data.object_url;
       }
-      const response = await axios.put(
-        `${VITE_IPCA_API}/common/user_info`,
-        {
-          avatar: avatarUrl ? avatarUrl : null,
-          confirm_new_password: confirm_new_password,
-          current_password: current_password,
-          dob: dob,
-          email: email,
-          gender: gender,
-          new_password: new_password,
-          nickname: nickname,
-          tel: tel,
-          dept_id: dept_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await axiosInstance.put(`/common/user_info`, {
+        avatar: avatarUrl ? avatarUrl : null,
+        confirm_new_password: confirm_new_password,
+        current_password: current_password,
+        dob: dob,
+        email: email,
+        gender: gender,
+        new_password: new_password,
+        nickname: nickname,
+        tel: tel,
+        dept_id: dept_id,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const profileSlice = createSlice({
