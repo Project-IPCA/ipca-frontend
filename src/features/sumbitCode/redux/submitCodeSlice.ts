@@ -58,40 +58,34 @@ export const getExercise = createAsyncThunk(
         chapter_idx: chapter_idx,
         item_id: item_id,
       };
-      const response = await axiosInstance.get(
-        `/student/assigned_exercise`,
-        {
-          params: params,
-        },
-      );
+      const response = await axiosInstance.get(`/student/assigned_exercise`, {
+        params: params,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 export const submitExercise = createAsyncThunk(
   "submitCode/sumbitExercise",
   async (
     { chapter_id, item_id, sourcecode, job_id }: SubmitExerciseRequest,
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
-      const response = await axiosInstance.post(
-        `/student/exercise_submit`,
-        {
-          item_id: item_id,
-          chapter_id: chapter_id,
-          sourcecode: sourcecode,
-          job_id: job_id,
-        }
-      );
+      const response = await axiosInstance.post(`/student/exercise_submit`, {
+        item_id: item_id,
+        chapter_id: chapter_id,
+        sourcecode: sourcecode,
+        job_id: job_id,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const submitCodeSlice = createSlice({

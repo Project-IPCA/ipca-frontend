@@ -58,11 +58,12 @@ axiosInstance.interceptors.response.use(
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
           window.location.href = "/login";
-          window.location.reload()
+          window.location.reload();
           return Promise.reject(error);
         }
       }
     }
+    return Promise.reject(error);
   }
 );
 
