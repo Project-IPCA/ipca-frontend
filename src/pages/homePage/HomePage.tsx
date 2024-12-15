@@ -1,8 +1,9 @@
 import { Button, Card, CardBody, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { profileNone, handCoding, coding } from "../../assets";
+import { handCoding, coding } from "../../assets";
 import { HomeInfo } from "../../features/homeInfo";
 import { UserIpAddress } from "../../features/userIpAddress";
+import ProfilePic from "../../features/homeInfo/components/ProfilePic";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function HomePage() {
             <Card className="shadow-none border-[1px] flex lg:flex-row flex-col">
               <CardBody className="lg:w-72 w-full space-y-2 flex justify-center items-center">
                 <div className="space-y-2">
-                  <img src={profileNone} className="h-36" />
+                  <ProfilePic />
                   <UserIpAddress />
                 </div>
               </CardBody>
