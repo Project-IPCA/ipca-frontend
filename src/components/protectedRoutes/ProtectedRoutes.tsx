@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/store";
 import { getLoginState } from "../../features/login/redux/loginSlice";
 import { setLogoutState } from "../../features/login/redux/loginSlice";
+import { getExerciseList } from "../../features/exerciseList/redux/exerciseListSlice";
 
 const VITE_IPCA_RT = import.meta.env.VITE_IPCA_RT;
 
@@ -16,16 +17,44 @@ function ProtectedRoutes() {
   useEffect(() => {
     if (data.profile.f_name) {
       const evtSource = new EventSource(
-        `${VITE_IPCA_RT}/user/connection/${data.profile.group_info?.group_id}?id=${data.profile.user_id}`
+        `${VITE_IPCA_RT}/user/connection/${data.profile.user_id}`
       );
       evtSource.onmessage = (event) => {
         if (event.data) {
-          if (!event.data.status as boolean) {
+          const rawData = JSON.parse(event.data);
+          if (!rawData.status as boolean) {
             evtSource.close();
             dispatch(setLogoutState());
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
             navigate("/login");
+          }
+        }
+      };
+      return () => {
+        evtSource.close();
+      };
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data.profile.group_info?.group_id) {
+      const evtSource = new EventSource(
+        `${VITE_IPCA_RT}/group-permission/${data.profile.group_info?.group_id}`
+      );
+      evtSource.onmessage = (event) => {
+        if (event.data) {
+          const rawData = JSON.parse(event.data);
+          if (!rawData.status as boolean) {
+            evtSource.close();
+            dispatch(setLogoutState());
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            navigate("/login");
+          } else {
+            if (rawData.message === "permission-change") {
+              dispatch(getExerciseList());
+            }
           }
         }
       };
