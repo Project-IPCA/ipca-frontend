@@ -55,9 +55,10 @@ axiosInstance.interceptors.response.use(
             return axiosInstance(originalRequest);
           }
         } catch (err) {
-          console.log("wtf");
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
+          window.location.href = "/login";
+          window.location.reload()
           return Promise.reject(error);
         }
       }
