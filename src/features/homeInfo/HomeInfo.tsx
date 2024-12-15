@@ -10,7 +10,7 @@ function HomeInfo() {
   const { data, error } = useAppSelector((state) => state.profile);
 
   useEffect(() => {
-    if (!initialized.current && !data.profile.f_name) {
+    if (!initialized.current) {
       initialized.current = true;
       dispatch(getProfile());
     }
