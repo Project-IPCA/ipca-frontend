@@ -54,6 +54,7 @@ function SubmissionHistory({
   const submissionResult: SubmissionResult[] =
     submission && submission.result ? JSON.parse(submission.result) : [];
 
+  console.log(submissionHistory);
   console.log(submission?.result);
   console.log(submissionResult);
 
