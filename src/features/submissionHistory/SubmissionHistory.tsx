@@ -6,8 +6,8 @@ import { Button, Chip, Typography } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { SUBMISSION_STATUS } from "../../constants/constants";
-// import TestCaseResult from "./components/TestCaseResult";
-// import { TestCaseOutput } from "../../components";
+import TestCaseResult from "./components/TestCaseResult";
+import { TestCaseOutput } from "../../components";
 import CodeDisplay from "../codeDisplay/CodeDisplay";
 import { STEPPER } from "../sumbitCode/constants";
 
@@ -52,11 +52,7 @@ function SubmissionHistory({
       : null;
 
   const submissionResult: SubmissionResult[] =
-    submission && submission.result ? JSON.parse(submission.result) : [];
-
-  console.log(submissionHistory);
-  console.log(submission?.result);
-  console.log(submissionResult);
+    submission && submission.result ? JSON.parse(submission.result) : null;
 
   const getStatusColor = () => {
     if (submission?.status === SUBMISSION_STATUS.accepted) {
@@ -216,25 +212,22 @@ function SubmissionHistory({
               <Typography variant="h6" className="mb-2">
                 Result
               </Typography>
-              {/*
-
-                {(submission?.status === SUBMISSION_STATUS.accepted ||
-                  submission?.status === SUBMISSION_STATUS.wrongAnswer ||
-                  submission?.status === SUBMISSION_STATUS.rejected) &&
-                  submissionResult.map((result, index) => (
-                    <TestCaseResult
+              {(submission?.status === SUBMISSION_STATUS.accepted ||
+                submission?.status === SUBMISSION_STATUS.wrongAnswer ||
+                submission?.status === SUBMISSION_STATUS.rejected) &&
+                submissionResult.map((result, index) => (
+                  <TestCaseResult
                     key={result.testcase_no}
                     result={result}
                     index={index}
-                    />
-              ))}
+                  />
+                ))}
               {submission?.status === SUBMISSION_STATUS.error && (
                 <TestCaseOutput output={submission.error_message || ""} />
               )}
               {submission?.status === SUBMISSION_STATUS.pending && (
                 <TestCaseOutput output={"Run time has rejected"} />
               )}
-              */}
             </div>
           </div>
         </>
