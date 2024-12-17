@@ -1,16 +1,19 @@
 import { Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { ipcaIc } from "../../assets";
 
 const Logo = () => {
   const navigate = useNavigate();
   return (
-    <Typography
-      as="a"
-      className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+    <div
+      className="flex items-center gap-x-1 mr-4 ml-2 py-1.5 cursor-pointer"
       onClick={() => navigate("/")}
     >
-      IPCA
-    </Typography>
+      <img src={ipcaIc} alt="brand" className="h-8 w-8 mb-1" />
+      <Typography as="a" className="  font-medium">
+        IPCA
+      </Typography>
+    </div>
   );
 };
 
