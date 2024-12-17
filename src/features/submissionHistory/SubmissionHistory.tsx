@@ -52,7 +52,7 @@ function SubmissionHistory({
       : null;
 
   const submissionResult: SubmissionResult[] =
-    submission && submission.result ? JSON.parse(submission.result) : null;
+    submission && submission.result ? JSON.parse(submission.result) : [];
 
   const getStatusColor = () => {
     if (submission?.status === SUBMISSION_STATUS.accepted) {
