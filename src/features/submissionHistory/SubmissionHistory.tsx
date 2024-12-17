@@ -6,8 +6,8 @@ import { Button, Chip, Typography } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { SUBMISSION_STATUS } from "../../constants/constants";
-import TestCaseResult from "./components/TestCaseResult";
-import { TestCaseOutput } from "../../components";
+// import TestCaseResult from "./components/TestCaseResult";
+// import { TestCaseOutput } from "../../components";
 import CodeDisplay from "../codeDisplay/CodeDisplay";
 import { STEPPER } from "../sumbitCode/constants";
 
@@ -54,6 +54,7 @@ function SubmissionHistory({
   const submissionResult: SubmissionResult[] =
     submission && submission.result ? JSON.parse(submission.result) : [];
 
+  console.log(submission?.result);
   console.log(submissionResult);
 
   const getStatusColor = () => {
