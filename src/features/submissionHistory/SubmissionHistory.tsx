@@ -54,6 +54,8 @@ function SubmissionHistory({
   const submissionResult: SubmissionResult[] =
     submission && submission.result ? JSON.parse(submission.result) : [];
 
+  console.log(submissionResult);
+
   const getStatusColor = () => {
     if (submission?.status === SUBMISSION_STATUS.accepted) {
       return "green";
@@ -212,22 +214,25 @@ function SubmissionHistory({
               <Typography variant="h6" className="mb-2">
                 Result
               </Typography>
-              {(submission?.status === SUBMISSION_STATUS.accepted ||
-                submission?.status === SUBMISSION_STATUS.wrongAnswer ||
-                submission?.status === SUBMISSION_STATUS.rejected) &&
-                submissionResult.map((result, index) => (
-                  <TestCaseResult
+              {/*
+
+                {(submission?.status === SUBMISSION_STATUS.accepted ||
+                  submission?.status === SUBMISSION_STATUS.wrongAnswer ||
+                  submission?.status === SUBMISSION_STATUS.rejected) &&
+                  submissionResult.map((result, index) => (
+                    <TestCaseResult
                     key={result.testcase_no}
                     result={result}
                     index={index}
-                  />
-                ))}
+                    />
+              ))}
               {submission?.status === SUBMISSION_STATUS.error && (
                 <TestCaseOutput output={submission.error_message || ""} />
               )}
               {submission?.status === SUBMISSION_STATUS.pending && (
                 <TestCaseOutput output={"Run time has rejected"} />
               )}
+              */}
             </div>
           </div>
         </>
