@@ -13,6 +13,12 @@
   "dependencies": {
     "@codemirror/lang-python": "^6.1.6",
     "@heroicons/react": "^2.1.5",
+    "@lexical/code": "^0.21.0",
+    "@lexical/link": "^0.21.0",
+    "@lexical/react": "^0.21.0",
+    "@lexical/rich-text": "^0.21.0",
+    "@lexical/selection": "^0.21.0",
+    "@lexical/utils": "^0.21.0",
     "@material-tailwind/react": "^2.1.10",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/lodash": "^4.17.9",
@@ -29,13 +35,7 @@
     "react-resizable-panels": "^2.1.4",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.5",
-    "uuid": "^10.0.0",
-    "@lexical/code": "^0.21.0",
-    "@lexical/link": "^0.21.0",
-    "@lexical/react": "^0.21.0",
-    "@lexical/rich-text": "^0.21.0",
-    "@lexical/selection": "^0.21.0",
-    "@lexical/utils": "^0.21.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
