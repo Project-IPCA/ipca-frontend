@@ -42,8 +42,6 @@ export default function ExerciseListDrawer({ isOpen, onClose }: Props) {
     return () => {};
   }, [dispatch, chapterList]);
 
-  console.log(sortedChapterList);
-
   useEffect(() => {
     if (error) {
       toast.error(error.error, {
