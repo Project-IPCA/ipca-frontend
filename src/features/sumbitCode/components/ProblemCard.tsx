@@ -9,6 +9,7 @@ import { SubmissionHistory } from "../../submissionHistory";
 import { TestCaseOutput } from "../../../components";
 import { SubmissionDetail } from "../SubmitCode";
 import { useParams } from "react-router-dom";
+import TextEditor from "./TextEditor";
 
 interface Props {
   name?: string;
@@ -87,7 +88,7 @@ const ProblemCard = ({
               <Typography variant="h4" className="pt-1 pb-2">
                 {name || ""}
               </Typography>
-              <Typography>{content || ""}</Typography>
+              <TextEditor value={content ?? ""} />
             </div>
             <div className="flex flex-col gap-y-3">
               {testcaseList
