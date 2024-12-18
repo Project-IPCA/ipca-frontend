@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Input } from "@material-tailwind/react";
 import ExerciseCard from "./components/ExerciseCard";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   clearExerciseListError,
   getExerciseList,
@@ -16,6 +16,14 @@ const ExerciseList = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(getExerciseListState);
   const error = useAppSelector(getExerciseListError);
+  const [search, setSearch] = useState<string>("");
+
+  const filteredData = useMemo(() => {
+    if (!search.trim()) return data;
+    return data.filter((item: any) =>
+      item.name.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [data, search]);
 
   useEffect(() => {
     if (!initialized.current && data.length <= 0) {
@@ -44,9 +52,14 @@ const ExerciseList = () => {
 
   return (
     <div>
-      <Input crossOrigin="" label="Search" icon={<MagnifyingGlassIcon />} />
+      <Input
+        crossOrigin=""
+        label="Search"
+        icon={<MagnifyingGlassIcon />}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       <div className="grid gap-8 mt-8 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
-        {data.map((item, index) => (
+        {filteredData.map((item, index) => (
           <ExerciseCard {...item} key={index} />
         ))}
       </div>
