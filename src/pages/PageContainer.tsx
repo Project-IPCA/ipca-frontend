@@ -6,10 +6,10 @@ const PageContainer = (props: {
 }) => {
   return (
     <div
-      className={`flex justify-center items-center w-screen  ${props.submitCodePage ? "h-screen mt-0" : "md:mt-20 mt-14"}`}
+      className={`md:flex md:justify-center md:items-center w-screen md:mb-0 mb-14  ${props.submitCodePage ? "h-screen lg:mt-0 md:mt-8 mt-24" : " md:mt-24 mt-20"}`}
     >
       <div
-        className={`px-8  w-full ${props.submitCodePage ? "lg:h-full lg:pt-24 pt-64  pb-6" : "py-4"}`}
+        className={`px-8  w-full ${props.submitCodePage ? "lg:h-full lg:pt-24   pb-6" : "py-4"}`}
       >
         {props.children}
       </div>

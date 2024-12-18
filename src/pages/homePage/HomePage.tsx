@@ -9,7 +9,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex w-screen min-h-screen justify-center items-center  pt-20 lg:px-20 px-5">
+    <div className="flex w-screen md:min-h-screen justify-center items-center  lg:pt-20 pt-24 lg:px-20 px-5 ">
       <div className="flex flex-col gap-5 h-full justify-center items-center w-full lg:pb-0 pb-6">
         <Card className="lg:h-96 w-full border-[1px] flex flex-row">
           <CardBody className="lg:w-2/3 w-full">

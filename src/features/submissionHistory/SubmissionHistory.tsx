@@ -182,7 +182,7 @@ function SubmissionHistory({
             <Typography variant="h4" className="pt-4">
               Submission #{submissionDetail?.attempt}
             </Typography>
-            <div className="flex justify-between items-center pt-6">
+            <div className="md:flex flex-col justify-between items-center pt-6 ">
               <div className="flex items-center gap-2">
                 <Chip
                   value={convertStatus(String(submission?.status))}
@@ -198,6 +198,7 @@ function SubmissionHistory({
                 </Typography>
               </div>
               <Chip
+                className="w-fit md:mt-0 mt-2"
                 value={`${submission?.marking}/2`}
                 color={getStatusColor()}
               />

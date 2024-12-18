@@ -168,7 +168,7 @@ const SubmitCode = () => {
             }),
           );
           dispatch(getChapterList());
-          dispatch(getExerciseList())
+          dispatch(getExerciseList());
         }
       };
     }
@@ -303,7 +303,7 @@ const SubmitCode = () => {
           </Panel>
         </PanelGroup>
       </div>
-      <div className="lg:hidden  w-full  flex flex-col gap-y-4">
+      <div className="lg:hidden w-full  flex flex-col gap-y-4 mb-4">
         <ProblemCard
           name={exercise?.name}
           content={exercise?.content}
