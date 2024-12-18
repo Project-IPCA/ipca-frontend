@@ -42,8 +42,10 @@ function PersonalInfo({ register, setValue, formData }: Props) {
         <DatePicker setValue={setValue} formData={formData} />
       </div>
       <div>
-        <Typography variant="h5">Gender</Typography>
-        <div className="flex w-max gap-4">
+        <Typography variant="h5" className="md:mb-0 mb-3">
+          Gender
+        </Typography>
+        <div className="flex md:flex-row flex-col w-max gap-4 ">
           <Radio
             crossOrigin=""
             label="Male"
