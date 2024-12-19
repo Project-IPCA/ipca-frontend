@@ -8,7 +8,6 @@ function InstructionsPage() {
       <div className="container mx-auto">
         <InfoCard title={"ข้อแนะนำการใช้งาน"} infoList={INSTRUCTIONS} />
       </div>
-      ;
     </PageContainer>
   );
 }
