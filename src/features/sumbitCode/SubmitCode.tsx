@@ -3,6 +3,8 @@ import ProblemCard from "./components/ProblemCard";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import {
+  CheckKeywordReponse,
+  CheckUserConstraintData,
   getExercise,
   getExerciseState,
   submitExercise,
@@ -30,11 +32,20 @@ import {
   getCodeDisplayState,
   getCodeFromMinio,
 } from "../codeDisplay/redux/codeDisplaySlice";
+import axiosInstance from "../../utils/axios";
+import axios from "axios";
 
 export interface SubmissionDetail {
   attempt: number;
   submissionId: string;
 }
+
+const ConstraintsTypeMap = {
+  eq: "Equal",
+  me: "More than equal",
+  le: "Less than equal",
+  na: "Not appear",
+} as const;
 
 const SubmitCode = () => {
   const dispatch = useAppDispatch();
@@ -89,9 +100,9 @@ const SubmitCode = () => {
   const sortedChapterList = useMemo(
     () =>
       [...chapterList].sort(
-        (a, b) => a.items[0]?.chapter_idx - b.items[0]?.chapter_idx,
+        (a, b) => a.items[0]?.chapter_idx - b.items[0]?.chapter_idx
       ),
-    [chapterList],
+    [chapterList]
   );
 
   const exerciseResult = useMemo(() => {
@@ -111,16 +122,74 @@ const SubmitCode = () => {
   }, [chapter, problem, sortedChapterList]);
 
   const onSubmitCode = async () => {
-    const uuid = uuidv4();
-    dispatch(
-      submitExercise({
-        chapter_id: exercise?.chapter_id ? exercise?.chapter_id : null,
-        item_id: problem ? parseInt(problem) : null,
+    try {
+      const response = await axiosInstance.post("/common/keyword_check", {
+        exercise_kw_list: exercise?.user_defined_constraints,
         sourcecode: sourcecode,
-        job_id: uuid,
-      }),
-    );
-    setJobId(uuid);
+      });
+      const responseData: CheckKeywordReponse = response.data;
+      if (responseData.status == "failed") {
+        const errConstraints = Object.entries(responseData.keyword_constraint)
+          .filter(
+            ([, val]) =>
+              val.length > 0 &&
+              val.some((item: CheckUserConstraintData) => !item.is_passed)
+          )
+          .reduce(
+            (acc, [key, val]) => ({
+              ...acc,
+              [key]: val.filter((item: CheckUserConstraintData) => !item.is_passed),
+            }),
+            {} as Record<string, CheckUserConstraintData[]>
+          );
+        Object.entries(errConstraints).map(([key, val]) => {
+          val.map((data: CheckUserConstraintData) => {
+            toast.error(
+              `${key} ${data.keyword} have to ${
+                ConstraintsTypeMap[data.type]
+              } ${data.type == "na" ? "" : data.limit}`,
+              {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              }
+            );
+          });
+        });
+        return;
+      }
+      const uuid = uuidv4();
+      dispatch(
+        submitExercise({
+          chapter_id: exercise?.chapter_id ? exercise?.chapter_id : null,
+          chapter_idx: exercise?.chapter_index ? exercise?.chapter_index : null,
+          item_id: problem ? parseInt(problem) : null,
+          sourcecode: sourcecode,
+          job_id: uuid,
+        })
+      );
+      setJobId(uuid);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.error, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -145,7 +214,7 @@ const SubmitCode = () => {
       for (const chapter of allChapterList) {
         if (chapter.is_open && chapter.last_exercise_success !== 5) {
           navigate(
-            `/exercise/${chapter.index}/${chapter.last_exercise_success}`,
+            `/exercise/${chapter.index}/${chapter.last_exercise_success}`
           );
           break;
         }
@@ -156,7 +225,7 @@ const SubmitCode = () => {
   useEffect(() => {
     if (jobId) {
       const evtSource = new EventSource(
-        `${VITE_IPCA_RT}/submission-result/${jobId}`,
+        `${VITE_IPCA_RT}/submission-result/${jobId}`
       );
       evtSource.onmessage = (event) => {
         if (event.data) {
@@ -165,7 +234,7 @@ const SubmitCode = () => {
             getSubmissionHistory({
               chapter_idx: chapter ? chapter : "",
               item_id: problem ? problem : "",
-            }),
+            })
           );
           dispatch(getChapterList());
           dispatch(getExerciseList());
@@ -235,7 +304,7 @@ const SubmitCode = () => {
       getExercise({
         chapter_idx: chapter ? chapter : "",
         item_id: problem ? problem : "",
-      }),
+      })
     );
     setProblemStepper(STEPPER.problem);
   }, [dispatch, chapter, problem]);
@@ -246,7 +315,7 @@ const SubmitCode = () => {
         getSubmissionHistory({
           chapter_idx: chapter ? chapter : "",
           item_id: problem ? problem : "",
-        }),
+        })
       );
     }
   }, [dispatch, chapter, problem, exercise]);
@@ -261,8 +330,8 @@ const SubmitCode = () => {
     )
       dispatch(
         getCodeFromMinio(
-          submissionHistory[submissionHistory.length - 1].sourcecode_filename,
-        ),
+          submissionHistory[submissionHistory.length - 1].sourcecode_filename
+        )
       );
   }, [dispatch, submissionHistory, codeDisplay]);
 

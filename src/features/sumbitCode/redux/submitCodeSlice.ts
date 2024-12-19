@@ -13,6 +13,7 @@ interface Params {
 
 interface SubmitExerciseRequest {
   chapter_id: string | null;
+  chapter_idx : number | null;
   item_id: number | null;
   sourcecode: string | null;
   job_id: string | null;
@@ -26,6 +27,56 @@ export interface Testcase {
   testcase_output: string;
 }
 
+export interface SuggestedConstraintData {
+  keyword: string;
+  limit: number;
+}
+
+export interface UserConstraintData {
+  keyword: string;
+  limit: number;
+  active: boolean;
+  type: ConstraintType
+}
+
+export interface SuggestedConstraint {
+  classes: SuggestedConstraintData[];
+  functions: SuggestedConstraintData[];
+  imports: SuggestedConstraintData[];
+  methods: SuggestedConstraintData[];
+  reserved_words: SuggestedConstraintData[];
+  variables: SuggestedConstraintData[];
+}
+
+export interface UserConstraint {
+  classes: UserConstraintData[];
+  functions: UserConstraintData[];
+  imports: UserConstraintData[];
+  methods: UserConstraintData[];
+  reserved_words: UserConstraintData[];
+  variables: UserConstraintData[];
+}
+
+export interface CheckUserConstraintData extends UserConstraintData{
+  is_passed : boolean
+}
+
+export interface CheckUserConstraint {
+  classes: CheckUserConstraintData[];
+  functions: CheckUserConstraintData[];
+  imports: CheckUserConstraintData[];
+  methods: CheckUserConstraintData[];
+  reserved_words: CheckUserConstraintData[];
+  variables: CheckUserConstraintData[];
+}
+
+export interface CheckKeywordReponse {
+  status: string;
+  keyword_constraint: CheckUserConstraint;
+}
+
+type ConstraintType = "eq" | "me" | "le" | "na";
+
 interface Exercise {
   chapter_id: string;
   chapter_index: number;
@@ -34,10 +85,10 @@ interface Exercise {
   full_mark: number;
   level: string;
   name: string;
-  suggested_constraints: string;
+  suggested_constraints: SuggestedConstraint
   testcase: string;
   testcase_list: Testcase[];
-  user_defined_constraints: string;
+  user_defined_constraints: UserConstraint
 }
 
 interface ExerciseState {
@@ -114,6 +165,14 @@ const submitCodeSlice = createSlice({
         const { chapter_idx, item_id } = action.meta.arg;
         state[`${chapter_idx}.${item_id}`] = {
           exercise: null,
+          isFetching: false,
+          error: action.payload as API_ERROR_RESPONSE,
+        };
+      })
+      .addCase(submitExercise.rejected,(state, action)=>{
+        const { chapter_idx, item_id } = action.meta.arg;
+        state[`${chapter_idx}.${item_id}`] = {
+          exercise : state[`${chapter_idx}.${item_id}`].exercise,
           isFetching: false,
           error: action.payload as API_ERROR_RESPONSE,
         };
