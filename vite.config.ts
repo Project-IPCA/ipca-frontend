@@ -10,6 +10,9 @@ export default defineConfig({
     open: true,
     hmr: true,
   },
+  resolve: {
+    extensions: [".mdx", ".js", ".ts", ".jsx", ".tsx"],
+  },
   build: {
     sourcemap: true,
   },
