@@ -4,8 +4,6 @@ import { resolveApiError } from "../../../utils/function";
 import { RootState } from "../../../store/store";
 import axiosInstance from "../../../utils/axios";
 
-const VITE_IPCA_API = import.meta.env.VITE_IPCA_API;
-
 interface GroupDetail {
   group_id: string;
   name: string;
