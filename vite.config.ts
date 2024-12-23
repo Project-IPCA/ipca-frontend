@@ -11,7 +11,7 @@ export default defineConfig({
     hmr: true,
   },
   resolve: {
-    extensions: [".mdx", ".js", ".ts", ".jsx", ".tsx"],
+    extensions: [".mdx", ".mjs", ".js", ".ts", ".jsx", ".tsx"],
   },
   build: {
     sourcemap: true,
