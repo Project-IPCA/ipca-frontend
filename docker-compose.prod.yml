@@ -1,7 +1,8 @@
 services:
   ipca-frontend:
     container_name: ipca-frontend
-    build: Dockerfile.prod
+    context: .
+    dockerfile: Dockerfile.prod
     restart: unless-stopped
     networks:
       - ipca-stack
