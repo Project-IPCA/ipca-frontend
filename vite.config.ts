@@ -8,4 +8,7 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
+  define: {
+    "process.env": {},
+  },
 });
