@@ -1,8 +1,9 @@
 services:
   ipca-frontend:
     container_name: ipca-frontend
-    context: .
-    dockerfile: Dockerfile.dev
+    build:  
+      context: .
+      dockerfile: Dockerfile.dev
     restart: on-failure
     networks:
       - ipca-stack
