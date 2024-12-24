@@ -7,13 +7,8 @@ export default defineConfig({
   base: "./",
   server: {
     port: 5174,
-    open: true,
-    hmr: true,
-  },
-  resolve: {
-    extensions: [".mdx", ".mjs", ".js", ".ts", ".jsx", ".tsx"],
   },
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
 });
