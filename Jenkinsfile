@@ -1,39 +1,36 @@
 pipeline {
     agent none
+    environment {
+        CREDENTIALS_ID = "${env.BRANCH_NAME == 'develop' ? 'frontend-dev' : 'prod'}"
+        COMPOSE_FILE = "${env.BRANCH_NAME == 'develop' ? 'docker-compose.dev.yml' : 'docker-compose.yml'}"
+        BUILD_OPTIONS = "${env.BRANCH_NAME == 'develop' ? '' : 'ipca-frontend --no-deps'}"
+        WORKSPACE_DIR = "${env.BRANCH_NAME == 'develop' ? '' : '/ipca/ipca-system'}"
+    }
     stages {
         stage('Build and Deploy') {
-            when {
-                branch 'develop'
+            agent { 
+                expression { 
+                    return env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent' 
+                }
             }
-            agent { label 'develop-agent' }
-            steps {
+            options {
                 script {
-                    withCredentials([file(credentialsId: 'frontend-dev', variable: 'env_file')]) {
-                        // Create workspace and pull code
-                        sh "cat ${env_file} > .env"
-                        // Start services
-                        sh "docker compose -f docker-compose.dev.yml up -d --build"
+                    if (env.BRANCH_NAME == 'master') {
+                        skipDefaultCheckout()
                     }
                 }
             }
-        }
-
-        stage('Build and Deploy master') {
-            when {
-                branch 'master'
-            }
-            agent { label 'master-agent' }
-            options {
-                skipDefaultCheckout()
-            }
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'frontend-prod', variable: 'env_file')]) {
-                        dir('/ipca/ipca-system') {
-                            // Create workspace and pull code
+                    withCredentials([file(credentialsId: ${CREDENTIALS_ID}, variable: 'env_file')]) {
+                        if (WORKSPACE_DIR) {
+                            dir(WORKSPACE_DIR) {
+                                sh "cat ${env_file} > .env"
+                                sh "docker compose -f ${COMPOSE_FILE} up -d --build ${BUILD_OPTIONS}"
+                            }
+                        } else {
                             sh "cat ${env_file} > .env"
-                            // Start services
-                            sh "docker compose -f docker-compose.yml up -d --build ipca-frontend --no-deps"
+                            sh "docker compose -f ${COMPOSE_FILE} up -d --build"
                         }
                     }
                 }
