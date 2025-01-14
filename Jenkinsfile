@@ -21,7 +21,7 @@ pipeline {
                         checkout scm
                     }
                     withCredentials([file(credentialsId: "${CREDENTIALS_ID}", variable: 'env_file')]) {
-                        if (WORKSPACE_DIR) {
+                        if ("${WORKSPACE_DIR}") {
                             dir("${WORKSPACE_DIR}") {
                                 sh "cat ${env_file} > .env"
                                 sh "docker compose -f ${COMPOSE_FILE} up -d --build ${BUILD_OPTIONS}"
