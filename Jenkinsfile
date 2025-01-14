@@ -7,14 +7,14 @@ pipeline {
         WORKSPACE_DIR = "${env.BRANCH_NAME == 'develop' ? '' : '/ipca/ipca-system'}"
         AGENT_NODE = "${env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent'}"
     }
-    stages {
-        options{
-            script{
-                if (env.BRANCH_NAME == 'master') {
-                    skipDefaultCheckout()
-                }
+    options{
+        script{
+            if (env.BRANCH_NAME == 'master') {
+                skipDefaultCheckout()
             }
         }
+    }
+    stages {
         stage('Build and Deploy') {
             agent { 
                 label "${AGENT_NODE}"
