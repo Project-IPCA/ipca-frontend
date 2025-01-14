@@ -23,11 +23,11 @@ pipeline {
                     withCredentials([file(credentialsId: "${CREDENTIALS_ID}", variable: 'env_file')]) {
                         if (env.BRANCH_NAME == 'develop') {
                                 sh "cat ${env_file} > .env"
-                                sh "docker compose -f ${COMPOSE_FILE} up -d --build ${BUILD_OPTIONS}"
+                                sh "docker compose -f ${COMPOSE_FILE} up -d --build"
                         } else {
                             dir("${WORKSPACE_DIR}") {
                                 sh "cat ${env_file} > .env"
-                                sh "docker compose -f ${COMPOSE_FILE} up -d --build"
+                                sh "docker compose -f ${COMPOSE_FILE} up -d --build ${BUILD_OPTIONS}"
                             }
                         }
                     }
