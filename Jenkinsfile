@@ -9,7 +9,7 @@ pipeline {
         OPTION = "${env.BRANCH_NAME == 'develop' ? '' : 'skipDefaultCheckout()'}"
     }
     options{
-        ${OPTION}
+        "${OPTION}"
     }
     stages {
         stage('Build and Deploy') {
