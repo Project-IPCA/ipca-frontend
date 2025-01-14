@@ -8,20 +8,20 @@ pipeline {
         AGENT_NODE = "${env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent'}"
     }
     stages {
+        options{
+            script{
+                if (env.BRANCH_NAME == 'master') {
+                    skipDefaultCheckout()
+                }
+            }
+        }
         stage('Build and Deploy') {
             agent { 
                 label "${AGENT_NODE}"
             }
-            options {
-                script {
-                    if (env.BRANCH_NAME == 'master') {
-                        skipDefaultCheckout()
-                    }
-                }
-            }
             steps {
                 script {
-                    withCredentials([file(credentialsId: ${CREDENTIALS_ID}, variable: 'env_file')]) {
+                    withCredentials([file(credentialsId: "${CREDENTIALS_ID}", variable: 'env_file')]) {
                         if (${WORKSPACE_DIR}) {
                             dir("${WORKSPACE_DIR}") {
                                 sh "cat ${env_file} > .env"
