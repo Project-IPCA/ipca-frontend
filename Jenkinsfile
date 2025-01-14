@@ -2,10 +2,10 @@ pipeline {
     agent none
     stages {
         stage('Build and Deploy') {
-            agent { label 'develop-agent' }
             when {
                 branch 'develop'
             }
+            agent { label 'develop-agent' }
             steps {
                 script {
                     withCredentials([file(credentialsId: 'frontend-dev', variable: 'env_file')]) {
@@ -19,10 +19,10 @@ pipeline {
         }
 
         stage('Build and Deploy master') {
-            agent { label 'master-agent' }
             when {
                 branch 'master'
             }
+            agent { label 'master-agent' }
             options {
                 skipDefaultCheckout()
             }
