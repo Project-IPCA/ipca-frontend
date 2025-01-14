@@ -5,13 +5,12 @@ pipeline {
         COMPOSE_FILE = "${env.BRANCH_NAME == 'develop' ? 'docker-compose.dev.yml' : 'docker-compose.yml'}"
         BUILD_OPTIONS = "${env.BRANCH_NAME == 'develop' ? '' : 'ipca-frontend --no-deps'}"
         WORKSPACE_DIR = "${env.BRANCH_NAME == 'develop' ? '' : '/ipca/ipca-system'}"
+        AGENT_NODE = "${env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent'}"
     }
     stages {
         stage('Build and Deploy') {
             agent { 
-                expression { 
-                    return env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent' 
-                }
+                label "${AGENT_NODE}"
             }
             options {
                 script {
@@ -23,8 +22,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: ${CREDENTIALS_ID}, variable: 'env_file')]) {
-                        if (WORKSPACE_DIR) {
-                            dir(WORKSPACE_DIR) {
+                        if (${WORKSPACE_DIR}) {
+                            dir("${WORKSPACE_DIR}") {
                                 sh "cat ${env_file} > .env"
                                 sh "docker compose -f ${COMPOSE_FILE} up -d --build ${BUILD_OPTIONS}"
                             }
