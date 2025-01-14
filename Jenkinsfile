@@ -6,10 +6,9 @@ pipeline {
         BUILD_OPTIONS = "${env.BRANCH_NAME == 'develop' ? '' : 'ipca-frontend --no-deps'}"
         WORKSPACE_DIR = "${env.BRANCH_NAME == 'develop' ? '' : '/ipca/ipca-system'}"
         AGENT_NODE = "${env.BRANCH_NAME == 'develop' ? 'develop-agent' : 'master-agent'}"
-        OPTION = "${env.BRANCH_NAME == 'develop' ? '' : 'skipDefaultCheckout()'}"
     }
     options{
-        "${OPTION}"
+        skipDefaultCheckout()
     }
     stages {
         stage('Build and Deploy') {
@@ -18,6 +17,9 @@ pipeline {
             }
             steps {
                 script {
+                    if(env.BRANCH_NAME == 'develop') {
+                        checkout scm
+                    }
                     withCredentials([file(credentialsId: "${CREDENTIALS_ID}", variable: 'env_file')]) {
                         if (${WORKSPACE_DIR}) {
                             dir("${WORKSPACE_DIR}") {
