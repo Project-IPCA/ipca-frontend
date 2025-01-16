@@ -47,13 +47,7 @@ function TestCaseResult({ result, index }: Props) {
       </div>
 
       <div className="mt-4 flex w-full gap-x-2">
-        <div className="w-1/2">
-          <Typography variant="small" className="mb-2">
-            Actual Output
-          </Typography>
-          <TestCaseOutput ref={actualOutputRef} output={result.actual} />
-        </div>
-        <div className="w-1/2 ">
+      <div className="w-1/2 ">
           <Typography variant="small" className="mb-2">
             Expected Output
           </Typography>
@@ -63,6 +57,12 @@ function TestCaseResult({ result, index }: Props) {
               result.show_to_student ? result.expected : "Testcase Hidden"
             }
           />
+        </div>
+        <div className="w-1/2">
+          <Typography variant="small" className="mb-2">
+            Actual Output
+          </Typography>
+          <TestCaseOutput ref={actualOutputRef} output={result.actual} />
         </div>
       </div>
     </Card>
