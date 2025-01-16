@@ -91,19 +91,23 @@ const ProblemCard = ({
               <TextEditor value={content ?? ""} />
             </div>
             <div className="flex flex-col gap-y-3">
-              {testcaseList
-                ?.filter((testcase) => testcase.show_to_student)
-                .map((testcase, index) => (
-                  <Card
-                    className="px-5 py-3 bg-white border-[1px] shadow-none"
-                    key={testcase.testcase_id}
-                  >
-                    <Typography variant="h6" className="pb-2">
-                      Testcase: {index + 1}
-                    </Typography>
-                    <TestCaseOutput output={testcase.testcase_output} />
-                  </Card>
-                ))}
+              {testcaseList?.map((testcase, index) => (
+                <Card
+                  className="px-5 py-3 bg-white border-[1px] shadow-none"
+                  key={testcase.testcase_id}
+                >
+                  <Typography variant="h6" className="pb-2">
+                    Testcase: {index + 1}
+                  </Typography>
+                  <TestCaseOutput
+                    output={
+                      testcase.show_to_student
+                        ? testcase.testcase_output
+                        : "Testcase Hidden"
+                    }
+                  />
+                </Card>
+              ))}
             </div>
           </>
         )}
