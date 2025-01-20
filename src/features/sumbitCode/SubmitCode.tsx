@@ -244,6 +244,17 @@ const SubmitCode = () => {
           dispatch(getExerciseList());
         }
       };
+      const entTimeOut = setTimeout(() => {
+        if (evtSource) {
+          evtSource.close();
+          window.location.reload()
+        }
+      }, 3000);
+
+      return () => {
+        evtSource.close();
+        clearTimeout(entTimeOut);
+      };
     }
   }, [jobId]);
 
