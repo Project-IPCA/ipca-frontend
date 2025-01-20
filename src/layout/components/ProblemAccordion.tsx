@@ -11,8 +11,8 @@ import {
 import { useState } from "react";
 import { Chapter } from "../redux/submitCodeLayoutSlice";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
-import { ALLOW_PROBLEM_TYPE } from "../../constants/constants";
 import { useNavigate, useParams } from "react-router-dom";
+import { checkCanAccess } from "../../utils/function";
 
 interface Props {
   data: Chapter;
@@ -48,13 +48,13 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
         >
           <Chip
             value={
-              data.allow_access_type === ALLOW_PROBLEM_TYPE.always
+              checkCanAccess(data)
                 ? "open"
                 : "closed"
             }
             size="sm"
             color={
-              data.allow_access_type === ALLOW_PROBLEM_TYPE.always
+              checkCanAccess(data)
                 ? "green"
                 : "red"
             }
@@ -72,11 +72,11 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
               key={index}
               className={`flex justify-between items-center 
                 ${item.chapter_idx == Number(chapter) && item.item_idx == Number(problem) ? "bg-blue-gray-50" : ""}`}
-              disabled={data.allow_access_type === ALLOW_PROBLEM_TYPE.deny}
+              disabled={!checkCanAccess(data)}
               onClick={() => onChangeProblem(item.chapter_idx, item.item_idx)}
             >
               <div className="flex">
-                {data.allow_access_type !== ALLOW_PROBLEM_TYPE.always && (
+                {checkCanAccess(data) && (
                   <div className="w-6 h-6">
                     <LockClosedIcon />
                   </div>
