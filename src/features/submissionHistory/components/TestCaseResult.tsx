@@ -46,8 +46,8 @@ function TestCaseResult({ result, index }: Props) {
         <Typography variant="h6">Testcase: {index + 1}</Typography>
       </div>
 
-      <div className="mt-4 flex w-full gap-x-2">
-      <div className="w-1/2 ">
+      <div className="mt-4 flex lg:flex-row flex-col w-full gap-x-2">
+      <div className="lg:w-1/2 w-full">
           <Typography variant="small" className="mb-2">
             Expected Output
           </Typography>
@@ -58,7 +58,7 @@ function TestCaseResult({ result, index }: Props) {
             }
           />
         </div>
-        <div className="w-1/2">
+        <div className="lg:w-1/2 w-full">
           <Typography variant="small" className="mb-2">
             Actual Output
           </Typography>
