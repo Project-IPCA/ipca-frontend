@@ -34,6 +34,7 @@ import {
 } from "../codeDisplay/redux/codeDisplaySlice";
 import axiosInstance from "../../utils/axios";
 import axios from "axios";
+import { checkCanSubmit } from "../../utils/function";
 
 export interface SubmissionDetail {
   attempt: number;
@@ -63,6 +64,7 @@ const SubmitCode = () => {
   const [submissionDetail, setSubmissionDetail] =
     useState<SubmissionDetail | null>(null);
   const navigate = useNavigate();
+  const [isCanSubmit, setIsCanSubmit] = useState<boolean>(false);
 
   const exerciseKey = `${chapter}.${problem}`;
   const exercise = exerciseState[exerciseKey]?.exercise || null;
@@ -138,7 +140,9 @@ const SubmitCode = () => {
           .reduce(
             (acc, [key, val]) => ({
               ...acc,
-              [key]: val.filter((item: CheckUserConstraintData) => !item.is_passed),
+              [key]: val.filter(
+                (item: CheckUserConstraintData) => !item.is_passed
+              ),
             }),
             {} as Record<string, CheckUserConstraintData[]>
           );
@@ -335,6 +339,15 @@ const SubmitCode = () => {
       );
   }, [dispatch, submissionHistory, codeDisplay]);
 
+  useEffect(() => {
+    if (chapter) {
+      setIsCanSubmit(
+        checkCanSubmit(chapterList[parseInt(chapter) - 1]) &&
+          exerciseResult?.marking !== exerciseResult?.full_mark
+      );
+    }
+  }, [chapter, chapterList]);
+
   return (
     <>
       <div className="w-full h-full lg:block hidden">
@@ -367,7 +380,10 @@ const SubmitCode = () => {
                 isSubmissionHistoryFetching && submissionResult
               }
               isExerciseExist={!!exercise}
-              canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
+              canSubmit={
+                exerciseResult?.marking !== exerciseResult?.full_mark &&
+                isCanSubmit
+              }
             />
           </Panel>
         </PanelGroup>
@@ -394,7 +410,9 @@ const SubmitCode = () => {
             isSubmissionHistoryFetching && submissionResult
           }
           isExerciseExist={!!exercise}
-          canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
+          canSubmit={
+            exerciseResult?.marking !== exerciseResult?.full_mark && isCanSubmit
+          }
         />
       </div>
     </>

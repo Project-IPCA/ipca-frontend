@@ -153,6 +153,9 @@ export const TESTCASE_STATUS = {
 export const ALLOW_PROBLEM_TYPE = {
   always: "ALWAYS",
   deny: "DENY",
+  timmer : "TIMER",
+  timerPaused : "TIMER_PASUED",
+  dateTime : "DATETIME"
 };
 
 export const SUBMISSION_STATUS = {
