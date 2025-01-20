@@ -40,3 +40,23 @@ export const checkCanSubmit = (chapterData: Chapter) => {
   }
   return false;
 };
+
+export const checkCanAccess = (chapterData: Chapter) => {
+  if (
+    chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.always ||
+    chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.timerPaused
+  ) {
+    return true;
+  } else if (chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.deny) {
+    return false;
+  } else if (
+    chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.timmer ||
+    chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.dateTime
+  ) {
+    return isTimeInRange(
+      chapterData.access_time_start,
+      chapterData.access_time_end
+    );
+  }
+  return false;
+};
