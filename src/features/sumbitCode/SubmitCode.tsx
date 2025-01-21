@@ -349,7 +349,7 @@ const SubmitCode = () => {
           exerciseResult?.marking !== exerciseResult?.full_mark
       );
     }
-  }, [chapter, chapterList]);
+  }, [chapter, chapterList, problem]);
 
   return (
     <>
@@ -383,10 +383,7 @@ const SubmitCode = () => {
                 isSubmissionHistoryFetching && submissionResult
               }
               isExerciseExist={!!exercise}
-              canSubmit={
-                exerciseResult?.marking !== exerciseResult?.full_mark &&
-                isCanSubmit
-              }
+              canSubmit={isCanSubmit}
             />
           </Panel>
         </PanelGroup>
@@ -413,9 +410,7 @@ const SubmitCode = () => {
             isSubmissionHistoryFetching && submissionResult
           }
           isExerciseExist={!!exercise}
-          canSubmit={
-            exerciseResult?.marking !== exerciseResult?.full_mark && isCanSubmit
-          }
+          canSubmit={isCanSubmit}
         />
       </div>
     </>
