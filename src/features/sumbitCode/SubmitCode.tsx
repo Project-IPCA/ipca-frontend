@@ -215,14 +215,7 @@ const SubmitCode = () => {
         theme: "light",
         transition: Bounce,
       });
-      for (const chapter of allChapterList) {
-        if (chapter.is_open && chapter.last_exercise_success !== 5) {
-          navigate(
-            `/exercise/${chapter.index}/${chapter.last_exercise_success}`
-          );
-          break;
-        }
-      }
+      navigate(`/exercises`);
     }
   }, [exerciseError, allChapterList]);
 
