@@ -231,6 +231,14 @@ const SubmitCode = () => {
       const evtSource = new EventSource(
         `${VITE_IPCA_RT}/submission-result/${jobId}`
       );
+
+      const entTimeOut = setTimeout(() => {
+        if (evtSource) {
+          evtSource.close();
+          window.location.reload();
+        }
+      }, 3000);
+
       evtSource.onmessage = (event) => {
         if (event.data) {
           setSubmissionResult(true);
@@ -242,18 +250,9 @@ const SubmitCode = () => {
           );
           dispatch(getChapterList());
           dispatch(getExerciseList());
-        }
-      };
-      const entTimeOut = setTimeout(() => {
-        if (evtSource) {
           evtSource.close();
-          window.location.reload()
+          clearTimeout(entTimeOut);
         }
-      }, 3000);
-
-      return () => {
-        evtSource.close();
-        clearTimeout(entTimeOut);
       };
     }
   }, [jobId]);
