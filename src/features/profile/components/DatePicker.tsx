@@ -14,7 +14,7 @@ import { ProfileData } from "../redux/profileSlice";
 import { formatDate } from "date-fns";
 import Calendar from "./Calendar";
 import YearMonthSelector from "./YearMonthSelector";
-import { DAYS, MONTHS } from "../../../constants/constants";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   setValue: UseFormSetValue<ProfileInfo>;
@@ -25,6 +25,11 @@ const DatePicker = ({ setValue, formData }: Props) => {
   const [date, setDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isYearMonthView, setIsYearMonthView] = useState(false);
+  const { t } = useTranslation();
+
+  const months = t("common.month.list", { returnObjects: true }) as string[];
+
+  const days = t("common.day", { returnObjects: true }) as string[];
 
   const handlePrevMonth = () => {
     setCurrentMonth(
@@ -57,12 +62,12 @@ const DatePicker = ({ setValue, formData }: Props) => {
       <PopoverHandler>
         <Input
           crossOrigin=""
-          label="Birth Date"
+          label={t("feature.profile.personal.dob")}
           onChange={() => {}}
           size="lg"
           value={
             date
-              ? `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+              ? `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getFullYear().toString().padStart(4, "0")}`
               : ""
           }
         />
@@ -73,21 +78,21 @@ const DatePicker = ({ setValue, formData }: Props) => {
             <ChevronLeftIcon className="h-4 w-4" />
           </IconButton>
           <Button variant="text" onClick={toggleView}>
-            {MONTHS[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+            {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </Button>
           <IconButton variant="text" onClick={handleNextMonth}>
             <ChevronRightIcon className="h-4 w-4" />
           </IconButton>
         </div>
         {isYearMonthView ? (
-          YearMonthSelector({
-            currentMonth: currentMonth,
-            setCurrentMonth: setCurrentMonth,
-          })
+          <YearMonthSelector
+            currentMonth={currentMonth}
+            setCurrentMonth={setCurrentMonth}
+          />
         ) : (
           <>
             <div className="grid grid-cols-7 gap-1 mb-2">
-              {DAYS.map((day) => (
+              {days.map((day) => (
                 <div key={day} className="text-center text-sm font-bold">
                   {day}
                 </div>

@@ -3,6 +3,7 @@ import { CodeBracketIcon } from "@heroicons/react/24/solid";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   sourcecode: string;
@@ -25,6 +26,7 @@ const CodeEditorCard = ({
 }: Props) => {
   const codeMirrorRef = useRef<HTMLDivElement | null>(null);
   const [codeMirrorHeight, setCodeMirrorHeight] = useState<number>(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (codeMirrorRef.current) {
@@ -53,7 +55,9 @@ const CodeEditorCard = ({
           <div className="w-5 h-5">
             <CodeBracketIcon />
           </div>
-          <Typography variant="h6">Code editor</Typography>
+          <Typography variant="h6">
+            {t("feature.submit_code.editor.title")}
+          </Typography>
         </div>
         {isEditCode ? (
           <Button
@@ -61,7 +65,7 @@ const CodeEditorCard = ({
             onClick={onSubmitCode}
             loading={isSubmissionHistoryFetching}
           >
-            Submit
+            {t("feature.submit_code.editor.submit")}
           </Button>
         ) : null}
       </div>
@@ -71,7 +75,7 @@ const CodeEditorCard = ({
           value={getSourcecodeDisplay()}
           extensions={[python()]}
           onChange={onChange}
-          placeholder="Put your code here..."
+          placeholder={t("feature.submit_code.editor.placeholder")}
           readOnly={!isEditCode}
           editable={isEditCode}
           autoFocus={isEditCode}

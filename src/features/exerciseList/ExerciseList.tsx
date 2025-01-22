@@ -10,6 +10,7 @@ import {
   getExerciseListState,
 } from "./redux/exerciseListSlice";
 import { Bounce, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const ExerciseList = () => {
   const initialized = useRef(false);
@@ -17,6 +18,7 @@ const ExerciseList = () => {
   const data = useAppSelector(getExerciseListState);
   const error = useAppSelector(getExerciseListError);
   const [search, setSearch] = useState<string>("");
+  const { t } = useTranslation();
 
   const filteredData = useMemo(() => {
     if (!search.trim()) return data;
@@ -54,7 +56,7 @@ const ExerciseList = () => {
     <div>
       <Input
         crossOrigin=""
-        label="Search"
+        label={t("feature.exercise_list.search")}
         icon={<MagnifyingGlassIcon />}
         onChange={(e) => setSearch(e.target.value)}
       />

@@ -3,6 +3,7 @@ import NavListMenu from "./NavListMenu";
 import { createElement } from "react";
 import { CodeBracketIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   handleCloseNav: () => void;
@@ -10,9 +11,10 @@ interface Props {
 
 function NavList({ handleCloseNav }: Props) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const navListItems = [
     {
-      label: "Exercise",
+      label: t("layout.default.menu.exercise"),
       icon: CodeBracketIcon,
       path: "/exercises",
     },

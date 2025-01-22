@@ -3,6 +3,7 @@ import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { ProfileInfo } from "../Profile";
 import { Dept, ProfileData } from "../redux/profileSlice";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   register: UseFormRegister<ProfileInfo>;
@@ -13,6 +14,7 @@ interface Props {
 function Contact({ register, setValue, formData }: Props) {
   const [selectedDept, setSelectedDept] = useState<string>();
   const [depts, setDepts] = useState<Dept[]>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!depts && formData?.selected?.departments?.length > 0) {
@@ -31,7 +33,7 @@ function Contact({ register, setValue, formData }: Props) {
     <>
       {depts && (
         <Select
-          label="Department"
+          label={t("feature.profile.contact.dept")}
           onChange={(val) => setSelectedDept(val)}
           value={selectedDept ? selectedDept : ""}
           size="lg"
@@ -46,15 +48,15 @@ function Contact({ register, setValue, formData }: Props) {
       <Input
         crossOrigin=""
         size="lg"
-        placeholder="Email"
-        label="Email"
+        placeholder={t("feature.profile.contact.email")}
+        label={t("feature.profile.contact.email")}
         {...register("email")}
       />
       <Input
         crossOrigin=""
         size="lg"
-        placeholder="Phone Number"
-        label="Phone Number"
+        placeholder={t("feature.profile.contact.phone")}
+        label={t("feature.profile.contact.phone")}
         {...register("tel")}
       />
     </>

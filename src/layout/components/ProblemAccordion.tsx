@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Chapter } from "../redux/submitCodeLayoutSlice";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { checkCanAccess } from "../../utils/function";
 
 interface Props {
@@ -23,6 +24,7 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
   const [open, setOpen] = useState<boolean>(true);
   const navigate = useNavigate();
   const { chapter, problem } = useParams();
+  const { t } = useTranslation();
 
   const toggleOpen = () => setOpen((cur) => !cur);
 
@@ -49,19 +51,15 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
           <Chip
             value={
               checkCanAccess(data)
-                ? "open"
-                : "closed"
+                ? t("feature.exercise_list.exercise.status.open")
+                : t("feature.exercise_list.exercise.status.closed")
             }
             size="sm"
-            color={
-              checkCanAccess(data)
-                ? "green"
-                : "red"
-            }
+            color={checkCanAccess(data) ? "green" : "red"}
             className="mr-2"
           />
           <Typography color="blue-gray" className="mr-auto font-normal">
-            {`Unit ${chapterIndex} ${data.chapter_name}`}
+            {`${t("feature.exercise_list.exercise.unit")} ${chapterIndex} ${data.chapter_name}`}
           </Typography>
         </AccordionHeader>
       </ListItem>
@@ -82,7 +80,7 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
                   </div>
                 )}
                 <Typography className="pl-2">
-                  Problem {item.item_idx}
+                  {t("layout.submit_code.menu.problem")} {item.item_idx}
                 </Typography>
               </div>
               <Chip

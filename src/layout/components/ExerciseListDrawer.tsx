@@ -12,6 +12,7 @@ import {
   getChapterListState,
 } from "../redux/submitCodeLayoutSlice";
 import { Bounce, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface Props {
 
 export default function ExerciseListDrawer({ isOpen, onClose }: Props) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const initialized = useRef(false);
   const dispatch = useAppDispatch();
@@ -71,7 +73,9 @@ export default function ExerciseListDrawer({ isOpen, onClose }: Props) {
     >
       <div className="flex justify-between items-center border-b-[1px] p-4 h-16">
         <div className="flex gap-x-2 items-center">
-          <Typography variant="h5">Problem List</Typography>
+          <Typography variant="h5">
+            {t("layout.submit_code.menu.problem_list")}
+          </Typography>
           <IconButton
             variant="text"
             color="blue-gray"

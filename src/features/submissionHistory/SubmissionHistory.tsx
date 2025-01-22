@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks/store";
 import { getSubmissionHistoryState } from "./redux/submissionHistorySlice";
-import { TABLE_HEADER } from "./constants";
 import { Button, Chip, Typography } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
@@ -10,6 +9,7 @@ import TestCaseResult from "./components/TestCaseResult";
 import { TestCaseOutput } from "../../components";
 import CodeDisplay from "../codeDisplay/CodeDisplay";
 import { STEPPER } from "../sumbitCode/constants";
+import { useTranslation } from "react-i18next";
 
 export interface SubmissionResult {
   actual: string;
@@ -39,6 +39,7 @@ function SubmissionHistory({
   onChangeSubmissionDetail,
 }: Props) {
   const submissionHistoryState = useAppSelector(getSubmissionHistoryState);
+  const { t } = useTranslation();
   const { chapter, problem } = useParams();
   const submissionKey = `${chapter}.${problem}`;
   const submissionHistory =
@@ -54,6 +55,13 @@ function SubmissionHistory({
   const submissionResult: SubmissionResult[] =
     submission && submission.result ? JSON.parse(submission.result) : null;
 
+  const TABLE_HEADER = [
+    t("feature.submit_code.submission.attempt"),
+    t("feature.submit_code.submission.status.title"),
+    t("feature.submit_code.submission.score"),
+    t("feature.submit_code.submission.time"),
+  ];
+
   const getStatusColor = () => {
     if (submission?.status === SUBMISSION_STATUS.accepted) {
       return "green";
@@ -64,17 +72,17 @@ function SubmissionHistory({
   const convertStatus = (status: string) => {
     switch (status) {
       case SUBMISSION_STATUS.accepted:
-        return "Accepted";
+        return t("feature.submit_code.submission.status.accepted");
       case SUBMISSION_STATUS.wrongAnswer:
-        return "Wrong Answer";
+        return t("feature.submit_code.submission.status.wrong_answer");
       case SUBMISSION_STATUS.error:
-        return "Error";
+        return t("feature.submit_code.submission.status.error");
       case SUBMISSION_STATUS.pending:
-        return "Pending";
+        return t("feature.submit_code.submission.status.pending");
       case SUBMISSION_STATUS.rejected:
-        return "Rejected";
+        return t("feature.submit_code.submission.status.rejected");
       default:
-        return "Not Valid";
+        return t("feature.submit_code.submission.status.not_valid");
     }
   };
 
@@ -160,7 +168,7 @@ function SubmissionHistory({
                           color="blue-gray"
                           className="font-medium"
                         >
-                          {format(time_submit, "MMM dd, yyyy HH:mm:ss")}
+                          {format(time_submit, "dd/MM/yyyy HH:mm:ss")}
                         </Typography>
                       </td>
                     </tr>

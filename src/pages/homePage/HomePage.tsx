@@ -4,9 +4,11 @@ import { handCoding, coding } from "../../assets";
 import { HomeInfo } from "../../features/homeInfo";
 import { UserIpAddress } from "../../features/userIpAddress";
 import ProfilePic from "../../features/homeInfo/components/ProfilePic";
+import { useTranslation } from "react-i18next";
 
 function HomePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="flex w-screen md:min-h-screen justify-center items-center  lg:pt-20 pt-24 lg:px-20 px-5 ">
@@ -14,10 +16,10 @@ function HomePage() {
         <Card className="lg:h-96 w-full border-[1px] flex flex-row">
           <CardBody className="lg:w-2/3 w-full">
             <Typography variant="h4" className="pb-2">
-              Welcome to,
+              {t("page.home.title.welcome")}
             </Typography>
             <Typography variant="h3" className="pb-4" color="black">
-              Computer Programming.
+              {t("page.home.title.compro")}
             </Typography>
             <Card className="shadow-none border-[1px] flex lg:flex-row flex-col">
               <CardBody className="lg:w-72 w-full space-y-2 flex justify-center items-center">
@@ -42,13 +44,13 @@ function HomePage() {
           <CardBody className="w-1/2 flex justify-center items-center">
             <div className="text-center">
               <Typography variant="h4" className="pb-2">
-                The heart concept is
+                {t("page.home.quote.intro")}
               </Typography>
               <Typography variant="h2" className="pb-9" color="black">
-                "Learning by doing"
+                {t("page.home.quote.main")}
               </Typography>
               <Button onClick={() => navigate("/exercises")}>
-                Let's start doing exercises!
+                {t("page.home.quote.button")}
               </Button>
             </div>
           </CardBody>
