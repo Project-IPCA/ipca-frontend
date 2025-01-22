@@ -1,0 +1,246 @@
+{
+  "page": {
+    "home": {
+      "title": {
+        "welcome": "Welcome to",
+        "compro": "Computer Programming."
+      },
+      "quote": {
+        "intro": "The heart concept is",
+        "main": "\"Learning by doing\"",
+        "button": "Let's start doing exercises!"
+      }
+    },
+    "instructions": {
+      "title": "Instructions",
+      "list": [
+        "This website is designed for first-year students of the course 01006012 Computer Programming, KMITL.",
+        "For optimal display, it is recommended to use Google Chrome or Firefox.",
+        "Internet Explorer is not recommended.",
+        "Students must write the program on their own device and upload the source code (filename.py) to the system.",
+        "After finishing your session, make sure to log out of the system.",
+        "For the first login, use your student ID (an 8-digit number) as both the username and password.",
+        "After the first login, change your password, complete your profile, and upload a clear photo of your face without a mask.",
+        "If you cannot log in, contact your instructor to reset the password.",
+        "Students must verify that their group is correct (on the Home page). If it is incorrect, inform your instructor.",
+        "Each chapter will have 5 exercises (items), each worth 2 points.",
+        "You can submit as many times as needed until your solution is correct. This is to encourage students to practice on their own.",
+        "If your submission does not earn points, it may score 0 or -1. However, if it passes, you will receive 2 points per item.",
+        "Students cannot log in from two computers at the same time.",
+        "The submitted source code will have a timestamp added at the beginning of the file, which does not affect execution.",
+        "Commands not included in the lessons are not recommended. If used, students take the risk of their submission not being graded.",
+        "After submitting the source code, if it does not pass the test cases, the system will display the first failed case.",
+        "Test cases without input display are called hidden test cases.",
+        "Instructors can open or close labs at any time.",
+        "After studying a lesson, students should complete the lab as soon as possible.",
+        "Each chapter's lab will remain open for approximately 7 days.",
+        "Submitted source code must not contain the word 'import'."
+      ]
+    },
+    "examination": {
+      "title": "Examination",
+      "list": [
+        "Bring your student ID card or citizen ID card, pencil, and pen.",
+        "Students must take the exam at the Department of Computer Engineering.",
+        "This is a closed-book exam.",
+        "Students will not be able to view their assignment submission history.",
+        "This website cannot be accessed from external computer networks outside the institution.",
+        "The computers are configured to access only this website. Other websites cannot be accessed.",
+        "Once in the room, test the computer. If any equipment is malfunctioning, report it to the staff.",
+        "Test the IDE (VS Code) you are using by writing a Hello World program. If it's not working, notify the staff before starting the exam.",
+        "Save files on drive D or E.",
+        "If the computer is restarted, any unsaved data will be lost.",
+        "No documents are allowed inside the exam room.",
+        "Do not bring electronic devices. Turn off the devices and place them in a safe location.",
+        "If cheating is detected, penalties will be imposed according to the regulations of the Faculty of Engineering.",
+        "Sign in before the exam and sign out after the exam."
+      ]
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "list": [
+        {
+          "title": "What is the Python version?",
+          "desc": "Python 3.12.0"
+        },
+        {
+          "title": "What should a student do if they want to change groups?",
+          "desc": "They need to inform the instructor about which group they are switching from."
+        },
+        {
+          "title": "How many times can I submit the lab?",
+          "desc": "You can submit the lab as many times as needed until you get a full score."
+        },
+        {
+          "title": "Why does the score change after submitting a full score and going back again?",
+          "desc": "This is because the system rechecks the submission every time you view the details. If there are changes in the problem or test case, it will affect your score."
+        },
+        {
+          "title": "What should I do if I forget my password?",
+          "desc": "Contact the instructor to reset your password."
+        },
+        {
+          "title": "What is a hidden test case?",
+          "desc": "A test case that is not shown on the screen intentionally. If it fails, read the problem again and analyze it thoroughly."
+        },
+        {
+          "title": "What should I do if I fail a hidden test case?",
+          "desc": "Go back and read the problem carefully. If you don't understand, consult the instructor."
+        },
+        {
+          "title": "Can I use commands outside of what has been taught?",
+          "desc": "No, all the problems are designed to be solved using only the commands taught or specified in the problem. It is not recommended to use commands beyond what has been covered."
+        },
+        {
+          "title": "Why is import not allowed?",
+          "desc": "1. Imports are unnecessary for basic operations. 2. Using imports complicates the lessons. 3. Using imports without understanding could lead to errors."
+        },
+        {
+          "title": "What is the maximum size of the output for a test case?",
+          "desc": "The output size should not exceed 1 MB."
+        },
+        {
+          "title": "Why is there no test case output?",
+          "desc": "Check the input. The number of inputs must match the problem requirements."
+        },
+        {
+          "title": "Can I submit a new file after I get a full score?",
+          "desc": "Yes, you can, but you need to inform the instructor and provide a reason."
+        },
+        {
+          "title": "The test passes on my machine but fails when submitted, what should I do?",
+          "desc": "Check the Python version, check for case sensitivity, and verify any extra spaces between characters."
+        }
+      ]
+    }
+  },
+  "feature": {
+    "home_info": {
+      "label": {
+        "student": "Student info",
+        "group": "Group",
+        "class_date": "Class date",
+        "year": "Year",
+        "semester": "Semester",
+        "instructor": "Instructor"
+      }
+    },
+    "exercise_list": {
+      "search": "Search",
+      "exercise": {
+        "unit": "Unit",
+        "status": {
+          "open": "Open",
+          "closed": "Closed"
+        }
+      }
+    },
+    "profile": {
+      "personal": {
+        "title": "Personal Information",
+        "nickname": "Nickname",
+        "dob": "Birth Date",
+        "gender": {
+          "title": "Gender",
+          "male": "Male",
+          "female": "Female",
+          "other": "Other"
+        }
+      },
+      "contact": {
+        "title": "Contact",
+        "dept": "Department",
+        "email": "Email",
+        "phone": "Phone Number"
+      },
+      "password": {
+        "title": "Reset Password",
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password",
+        "current_password": "Current Password"
+      }
+    },
+    "submit_code": {
+      "problem": {
+        "title": "Problem",
+        "problem": "Problem",
+        "chapter": "Chapter"
+      },
+      "submission": {
+        "title": "Submission History",
+        "attempt": "# Attempt",
+        "status": {
+          "title": "Status",
+          "accepted": "Accepted",
+          "wrong_answer": "Wrong Answer",
+          "error": "Error",
+          "pending": "Pending",
+          "rejected": "Rejected",
+          "not_valid": "Not Valid"
+        },
+        "score": "Score",
+        "time": "Submitted Time"
+      },
+      "editor": {
+        "title": "Code editor",
+        "placeholder": "Put your code here...",
+        "submit": "submit"
+      }
+    }
+  },
+  "layout": {
+    "default": {
+      "menu": {
+        "exercise": "Exercise",
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Guidelines for using the website."
+        },
+        "examination": {
+          "title": "Examination",
+          "desc": "Regulations for practical examinations."
+        },
+        "faq": {
+          "title": "FAQs",
+          "desc": "Frequently asked questions about using the website."
+        }
+      },
+      "profile": {
+        "menu": {
+          "my_profile": "My Profile",
+          "sign_out": "Sign Out"
+        }
+      }
+    },
+    "submit_code": {
+      "menu": {
+        "problem_list": "Problem List",
+        "problem": "Problem"
+      }
+    }
+  },
+  "common": {
+    "button": {
+      "submit": "Submit"
+    },
+    "day": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "month": {
+      "title": "Month",
+      "list": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    },
+    "year": "Year"
+  }
+}

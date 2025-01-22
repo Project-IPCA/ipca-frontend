@@ -18,6 +18,7 @@ import { useAppDispatch } from "../../hooks/store";
 import { logout } from "../redux/layoutSlice";
 import { setLogoutState } from "../../features/login/redux/loginSlice";
 import { profileNone } from "../../assets";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   profileImage: string;
@@ -27,16 +28,17 @@ function ProfileMenu({ profileImage }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const profileMenuItems = [
     {
-      label: "My Profile",
+      label: t("layout.default.profile.menu.my_profile"),
       icon: UserCircleIcon,
       path: "/profile",
       next: () => {},
     },
     {
-      label: "Sign Out",
+      label: t("layout.default.profile.menu.sign_out"),
       icon: PowerIcon,
       path: "/login",
       next: async () => {

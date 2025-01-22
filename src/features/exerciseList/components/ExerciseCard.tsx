@@ -1,6 +1,7 @@
 import { Card, Chip, Progress, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { ExerciseInfo } from "../redux/exerciseListSlice";
+import { useTranslation } from "react-i18next";
 
 const ExerciseCard = ({
   index,
@@ -11,6 +12,7 @@ const ExerciseCard = ({
   last_exercise_success,
 }: ExerciseInfo) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <Card
       className={`w-full h-60 p-5 flex flex-col justify-between cursor-pointer border-[1px] ${is_open ? "" : "bg-gray-50 cursor-default text-gray-500"}`}
@@ -22,11 +24,15 @@ const ExerciseCard = ({
     >
       <div>
         <Chip
-          value={is_open ? "Open" : "Closed"}
+          value={
+            is_open
+              ? t("feature.exercise_list.exercise.status.open")
+              : t("feature.exercise_list.exercise.status.closed")
+          }
           className={`w-fit ${is_open ? "bg-green-400" : "bg-red-400"}`}
         />
         <Typography variant="lead" className="mt-4">
-          Unit {index}: {name}
+          {t("feature.exercise_list.exercise.unit")} {index}: {name}
         </Typography>
       </div>
       <div>

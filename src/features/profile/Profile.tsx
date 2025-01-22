@@ -12,6 +12,7 @@ import PersonalInfo from "./components/PersonalInfo";
 import Contact from "./components/Contact";
 import ResetPassword from "./components/ResetPassword";
 import ProfileImage from "./components/ProfileImage";
+import { useTranslation } from "react-i18next";
 
 export interface ProfileInfo {
   avatar: string;
@@ -35,6 +36,7 @@ function Profile() {
   const { register, handleSubmit, reset, setValue } = useForm<ProfileInfo>();
   const [profileImage, setProfileImage] = useState<string>("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
+  const { t } = useTranslation();
 
   const handleImageChange = (image: string) => {
     setProfileImage(image);
@@ -127,7 +129,7 @@ function Profile() {
               onFileChange={handleFileChange}
             />
             <Typography variant="h4" color="blue-gray">
-              Personal Information
+              {t("feature.profile.personal.title")}
             </Typography>
             <PersonalInfo
               register={register}
@@ -138,7 +140,7 @@ function Profile() {
           <div className="lg:h-full flex flex-col gap-y-5 md:w-1/2">
             <Card className="h-1/2 p-6 space-y-5 border-[1px]">
               <Typography variant="h4" color="blue-gray">
-                Contact
+                {t("feature.profile.contact.title")}
               </Typography>
               <Contact
                 register={register}
@@ -148,7 +150,7 @@ function Profile() {
             </Card>
             <Card className="h-1/2 p-6 space-y-5 border-[1px]">
               <Typography variant="h4" color="blue-gray">
-                Reset Password
+                {t("feature.profile.password.title")}
               </Typography>
               <ResetPassword register={register} />
             </Card>
@@ -159,8 +161,8 @@ function Profile() {
             <Input
               crossOrigin=""
               size="lg"
-              placeholder="Current Password"
-              label="Current Password"
+              placeholder={t("feature.profile.password.current_password")}
+              label={t("feature.profile.password.current_password")}
               type="password"
               {...register("current_password")}
             />
@@ -170,7 +172,7 @@ function Profile() {
             disabled={isUpdating}
             loading={isUpdating}
           >
-            Submit
+            {t("common.button.submit")}
           </Button>
         </div>
       </div>
