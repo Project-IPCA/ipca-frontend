@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks/store";
 import { getLoginState } from "../../features/login/redux/loginSlice";
 import { setLogoutState } from "../../features/login/redux/loginSlice";
 import { getExerciseList } from "../../features/exerciseList/redux/exerciseListSlice";
+import { resetState } from "../../store/store";
 
 const VITE_IPCA_RT = import.meta.env.VITE_IPCA_RT;
 
@@ -27,6 +28,7 @@ function ProtectedRoutes() {
             dispatch(setLogoutState());
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
+            dispatch(resetState())
             navigate("/login");
           }
         }

@@ -19,6 +19,7 @@ import { logout } from "../redux/layoutSlice";
 import { setLogoutState } from "../../features/login/redux/loginSlice";
 import { profileNone } from "../../assets";
 import { useTranslation } from "react-i18next";
+import { resetState } from "../../store/store";
 
 interface Props {
   profileImage: string;
@@ -46,6 +47,7 @@ function ProfileMenu({ profileImage }: Props) {
         dispatch(setLogoutState());
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        dispatch(resetState());
       },
     },
   ];

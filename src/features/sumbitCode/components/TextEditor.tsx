@@ -1159,7 +1159,7 @@ function TextEditor({
       : "focus-within:!border-gray-900 border-blue-gray-200";
   };
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    <LexicalComposer initialConfig={editorConfig} key={value}>
       <div
         className={`relative overflow-hidden w-full ${!!onChange ? "rounded-xl" : "rounded-none"} border  focus-within:!border-2  border-blue-gray-200 bg-white text-left font-normal leading-5 text-gray-900 
           ${getEditorBorder()}
@@ -1172,7 +1172,7 @@ function TextEditor({
           handleToggleUpdated={handleToggleUpdated}
         />
         <div
-          className={`relative ${!!onChange ? "rounded-b-lg" : "rounded-none"} border-opacity-5 bg-white ${!!onChange ? "h-[300px]" : ""} overflow-scroll `}
+          className={`relative ${!!onChange ? "rounded-b-lg" : "rounded-none"} border-opacity-5 bg-white ${!!onChange ? "h-[300px]" : ""} overflow-auto `}
         >
           <RichTextPlugin
             contentEditable={
