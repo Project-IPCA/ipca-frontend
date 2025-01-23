@@ -164,7 +164,8 @@
       "problem": {
         "title": "Problem",
         "problem": "Problem",
-        "chapter": "Chapter"
+        "chapter": "Chapter",
+        "testcase" : "Testcase"
       },
       "submission": {
         "title": "Submission History",
@@ -179,7 +180,14 @@
           "not_valid": "Not Valid"
         },
         "score": "Score",
-        "time": "Submitted Time"
+        "time": "Submitted Time",
+        "submission" : "Submission",
+        "submitted_at" : "Submitted at",
+        "sourcecode" : "Sourcecode",
+        "result":"Result",
+        "expect_output" : "Expected Output",
+        "actual_output":"Actual Output",
+        "back" : "Back"
       },
       "editor": {
         "title": "Code editor",

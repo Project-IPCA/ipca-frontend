@@ -48,7 +48,7 @@ function SubmissionHistory({
   const submission =
     submissionHistory && submissionHistory.length > 0
       ? submissionHistory.find(
-          (sub) => sub.submission_id === submissionDetail?.submissionId,
+          (sub) => sub.submission_id === submissionDetail?.submissionId
         )
       : null;
 
@@ -118,7 +118,7 @@ function SubmissionHistory({
                   (
                     { submission_id, status, time_submit, marking },
                     index,
-                    arr,
+                    arr
                   ) => (
                     <tr
                       key={submission_id}
@@ -126,7 +126,7 @@ function SubmissionHistory({
                       onClick={() => {
                         onChangeSubmissionDetail(
                           submission_id,
-                          arr.length - index,
+                          arr.length - index
                         );
                         onStepperChange(STEPPER.result);
                       }}
@@ -172,7 +172,7 @@ function SubmissionHistory({
                         </Typography>
                       </td>
                     </tr>
-                  ),
+                  )
                 )}
           </tbody>
         </table>
@@ -184,11 +184,13 @@ function SubmissionHistory({
             className="flex items-center gap-2 p-2"
             onClick={() => onStepperChange(STEPPER.submission)}
           >
-            <ArrowLeftIcon className="w-4 h-4" /> Back
+            <ArrowLeftIcon className="w-4 h-4" />{" "}
+            {t("feature.submit_code.submission.back")}
           </Button>
           <div className="px-6">
             <Typography variant="h4" className="pt-4">
-              Submission #{submissionDetail?.attempt}
+              {t("feature.submit_code.submission.submission")} #
+              {submissionDetail?.attempt}
             </Typography>
             <div className="flex md:flex-row flex-col justify-between md:items-center items-start pt-6 ">
               <div className="flex md:flex-row flex-col md:items-center items-start gap-2">
@@ -198,10 +200,10 @@ function SubmissionHistory({
                   className="rounded-full"
                 />
                 <Typography variant="small">
-                  Submitted at{" "}
+                  {t("feature.submit_code.submission.submitted_at")}{" "}
                   {format(
                     String(submission?.time_submit),
-                    "MMM dd, yyyy HH:mm:ss",
+                    "MMM dd, yyyy HH:mm:ss"
                   )}
                 </Typography>
               </div>
@@ -213,13 +215,13 @@ function SubmissionHistory({
             </div>
             <div className="pt-4">
               <Typography variant="h6" className="mb-2">
-                Sourcecode
+                {t("feature.submit_code.submission.sourcecode")}
               </Typography>
               <CodeDisplay fileName={String(submission?.sourcecode_filename)} />
             </div>
             <div className="pt-4">
               <Typography variant="h6" className="mb-2">
-                Result
+                {t("feature.submit_code.submission.result")}
               </Typography>
               {(submission?.status === SUBMISSION_STATUS.accepted ||
                 submission?.status === SUBMISSION_STATUS.wrongAnswer ||

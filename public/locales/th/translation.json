@@ -164,7 +164,8 @@
       "problem": {
         "title": "โจทย์",
         "problem": "โจทย์ข้อที่",
-        "chapter": "บทที่"
+        "chapter": "บทที่",
+        "testcase" : "เทสเคส"
       },
       "submission": {
         "title": "ประวัติการส่งโค้ด",
@@ -179,7 +180,14 @@
           "not_valid": "ไม่ถูกต้อง"
         },
         "score": "คะแนน",
-        "time": "เวลาในการส่ง"
+        "time": "เวลาในการส่ง",
+        "submission" : "การส่งโค้ด",
+        "submitted_at" : "ส่งเมื่อ",
+        "sourcecode" : "ซอร์สโค้ด",
+        "result":"ผลลัพธ์",
+        "expect_output" : "เอาต์พุตที่คาดหวัง",
+        "actual_output":"เอาต์พุตที่ได้",
+        "back" : "กลับ"
       },
       "editor": {
         "title": "เขียนโค้ด",
