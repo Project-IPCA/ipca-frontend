@@ -89,7 +89,9 @@ const ProblemCard = ({
           <>
             <div className="break-words  border-b-[1px] mb-5 pb-5">
               <Typography variant="small" className="pt-4 font-medium">
-                {`${t("feature.submit_code.problem.chapter")} ${chapter || ""} ${t("feature.submit_code.problem.problem")} ${problem || ""}`}
+                {`${t("feature.submit_code.problem.chapter")} ${
+                  chapter || ""
+                } ${t("feature.submit_code.problem.problem")} ${problem || ""}`}
               </Typography>
               <Typography variant="h4" className="pt-1 pb-2">
                 {name || ""}
@@ -103,7 +105,7 @@ const ProblemCard = ({
                   key={testcase.testcase_id}
                 >
                   <Typography variant="h6" className="pb-2">
-                    Testcase: {index + 1}
+                    {t("feature.submit_code.problem.testcase")}: {index + 1}
                   </Typography>
                   <TestCaseOutput
                     output={
