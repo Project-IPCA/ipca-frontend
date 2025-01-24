@@ -1,3 +1,4 @@
+import "katex/dist/katex.css";
 import { createPortal } from "react-dom";
 import {
   Dispatch,
@@ -31,6 +32,11 @@ import {
   LexicalEditor,
   BaseSelection,
   $getRoot,
+  $insertNodes,
+  LexicalCommand,
+  createCommand,
+  $isRootOrShadowRoot,
+  COMMAND_PRIORITY_EDITOR,
 } from "lexical";
 import {
   $isListNode,
@@ -63,13 +69,28 @@ import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
+import {
+  $getNearestNodeOfType,
+  $wrapNodeInElement,
+  mergeRegister,
+} from "@lexical/utils";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { ImageNode } from "./ImageNode";
+import { $createEquationNode, EquationNode } from "./EquationNode";
 
 const LowPriority = 1;
+
+type CommandPayload = {
+  equation: string;
+  inline: boolean;
+};
+
+const INSERT_EQUATION_COMMAND: LexicalCommand<CommandPayload> = createCommand(
+  "INSERT_EQUATION_COMMAND",
+);
 
 const supportedBlockTypes = new Set([
   "paragraph",
@@ -1120,6 +1141,36 @@ function ToolbarPlugin({
   );
 }
 
+function EquationsPlugin(): JSX.Element | null {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    if (!editor.hasNodes([EquationNode])) {
+      throw new Error(
+        "EquationsPlugins: EquationsNode not registered on editor",
+      );
+    }
+
+    return editor.registerCommand<CommandPayload>(
+      INSERT_EQUATION_COMMAND,
+      (payload) => {
+        const { equation, inline } = payload;
+        const equationNode = $createEquationNode(equation, inline);
+
+        $insertNodes([equationNode]);
+        if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {
+          $wrapNodeInElement(equationNode, $createParagraphNode).selectEnd();
+        }
+
+        return true;
+      },
+      COMMAND_PRIORITY_EDITOR,
+    );
+  }, [editor]);
+
+  return null;
+}
+
 const editorConfig = {
   namespace: "MyEditor",
   onError(error: Error) {
@@ -1134,6 +1185,8 @@ const editorConfig = {
     CodeHighlightNode,
     AutoLinkNode,
     LinkNode,
+    ImageNode,
+    EquationNode,
   ],
 };
 
@@ -1184,6 +1237,7 @@ function TextEditor({
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
           />
+          <EquationsPlugin />
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
