@@ -1,5 +1,9 @@
 {
   "page": {
+    "login": {
+      "title": "เข้าสู่ระบบ",
+      "desc": "แล็บคอมพิวเตอร์โปรแกรมมิ่ง สจล."
+    },
     "home": {
       "title": {
         "welcome": "ยินดีต้อนรับสู่",
@@ -115,6 +119,19 @@
     }
   },
   "feature": {
+    "login_form": {
+      "label": {
+        "username": "ชื่อผู้ใช้",
+        "password": "รหัสผ่าน"
+      },
+      "placeholder": {
+        "username": "ชื่อผู้ใช้",
+        "password": "รหัสผ่าน"
+      },
+      "button": {
+        "sign_in": "เข้าสู่ระบบ"
+      }
+    },
     "home_info": {
       "label": {
         "student": "ข้อมูลนักเรียน",
@@ -165,7 +182,7 @@
         "title": "โจทย์",
         "problem": "โจทย์ข้อที่",
         "chapter": "บทที่",
-        "testcase" : "เทสเคส"
+        "testcase": "เทสเคส"
       },
       "submission": {
         "title": "ประวัติการส่งโค้ด",
@@ -181,13 +198,13 @@
         },
         "score": "คะแนน",
         "time": "เวลาในการส่ง",
-        "submission" : "การส่งโค้ด",
-        "submitted_at" : "ส่งเมื่อ",
-        "sourcecode" : "ซอร์สโค้ด",
-        "result":"ผลลัพธ์",
-        "expect_output" : "เอาต์พุตที่คาดหวัง",
-        "actual_output":"เอาต์พุตที่ได้",
-        "back" : "กลับ"
+        "submission": "การส่งโค้ด",
+        "submitted_at": "ส่งเมื่อ",
+        "sourcecode": "ซอร์สโค้ด",
+        "result": "ผลลัพธ์",
+        "expect_output": "เอาต์พุตที่คาดหวัง",
+        "actual_output": "เอาต์พุตที่ได้",
+        "back": "กลับ"
       },
       "editor": {
         "title": "เขียนโค้ด",

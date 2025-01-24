@@ -1,5 +1,9 @@
 {
   "page": {
+    "login": {
+      "title": "Sign In",
+      "desc": "Computer Programming Laboratory, KMITL"
+    },
     "home": {
       "title": {
         "welcome": "Welcome to",
@@ -115,6 +119,19 @@
     }
   },
   "feature": {
+    "login_form": {
+      "label": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "placeholder": {
+        "username": "username",
+        "password": "password"
+      },
+      "button": {
+        "sign_in": "Sign In"
+      }
+    },
     "home_info": {
       "label": {
         "student": "Student info",
@@ -165,7 +182,7 @@
         "title": "Problem",
         "problem": "Problem",
         "chapter": "Chapter",
-        "testcase" : "Testcase"
+        "testcase": "Testcase"
       },
       "submission": {
         "title": "Submission History",
@@ -181,13 +198,13 @@
         },
         "score": "Score",
         "time": "Submitted Time",
-        "submission" : "Submission",
-        "submitted_at" : "Submitted at",
-        "sourcecode" : "Sourcecode",
-        "result":"Result",
-        "expect_output" : "Expected Output",
-        "actual_output":"Actual Output",
-        "back" : "Back"
+        "submission": "Submission",
+        "submitted_at": "Submitted at",
+        "sourcecode": "Sourcecode",
+        "result": "Result",
+        "expect_output": "Expected Output",
+        "actual_output": "Actual Output",
+        "back": "Back"
       },
       "editor": {
         "title": "Code editor",

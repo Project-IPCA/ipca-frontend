@@ -5,6 +5,7 @@ import { clearErrorState, getLoginState, loginUser } from "./redux/loginSlice";
 import { useEffect, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type LoginInput = {
   username: string;
@@ -17,6 +18,7 @@ function Login() {
   const loginState = useAppSelector(getLoginState);
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (loginState.username && loginState.password) {
@@ -24,7 +26,7 @@ function Login() {
         loginUser({
           username: loginState.username,
           password: loginState.password,
-        }),
+        })
       );
     }
   }, [dispatch, loginState.password, loginState.username]);
@@ -61,7 +63,7 @@ function Login() {
       loginUser({
         username: data.username,
         password: data.password,
-      }),
+      })
     );
   };
 
@@ -69,10 +71,10 @@ function Login() {
     <div className="flex justify-center items-center w-screen h-screen">
       <Card className="p-6">
         <Typography variant="h4" color="blue-gray">
-          Sign In
+          {t("page.login.title")}
         </Typography>
         <Typography color="gray" className="mt-1 font-normal">
-          Computer Programming Laboratory, KMITL
+          {t("page.login.desc")}
         </Typography>
         <form
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
@@ -80,27 +82,27 @@ function Login() {
         >
           <div className="mb-1 flex flex-col gap-6">
             <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Username
+              {t("feature.login_form.label.username")}
             </Typography>
             <Input
               {...register("username")}
               crossOrigin=""
               size="lg"
-              placeholder="username"
+              placeholder={t("feature.login_form.placeholder.username")}
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
             />
             <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
+              {t("feature.login_form.label.password")}
             </Typography>
             <Input
               {...register("password")}
               crossOrigin=""
               type="password"
               size="lg"
-              placeholder="password"
+              placeholder={t("feature.login_form.placeholder.password")}
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
@@ -114,7 +116,7 @@ function Login() {
             disabled={pendingLogin}
             loading={pendingLogin}
           >
-            sign in
+            {t("feature.login_form.button.sign_in")}
           </Button>
         </form>
       </Card>
