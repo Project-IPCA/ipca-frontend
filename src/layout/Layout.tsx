@@ -9,7 +9,7 @@ import {
   getProfile,
   getProfileState,
 } from "../features/profile/redux/profileSlice";
-import MultilingualMenu from "./components/MultilingualMenu";
+import MultilingualMenu from "../components/MultilingualMenu/MultilingualMenu";
 
 function Layout() {
   const dispatch = useAppDispatch();

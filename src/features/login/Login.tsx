@@ -1,4 +1,10 @@
-import { Button, Card, Input, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Input,
+  Typography,
+} from "@material-tailwind/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import { clearErrorState, getLoginState, loginUser } from "./redux/loginSlice";
@@ -6,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Bounce, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import MultilingualMenu from "../../components/MultilingualMenu/MultilingualMenu";
 
 type LoginInput = {
   username: string;
@@ -26,7 +33,7 @@ function Login() {
         loginUser({
           username: loginState.username,
           password: loginState.password,
-        })
+        }),
       );
     }
   }, [dispatch, loginState.password, loginState.username]);
@@ -63,62 +70,71 @@ function Login() {
       loginUser({
         username: data.username,
         password: data.password,
-      })
+      }),
     );
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <Card className="p-6">
-        <Typography variant="h4" color="blue-gray">
-          {t("page.login.title")}
-        </Typography>
-        <Typography color="gray" className="mt-1 font-normal">
-          {t("page.login.desc")}
-        </Typography>
-        <form
-          className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              {t("feature.login_form.label.username")}
-            </Typography>
-            <Input
-              {...register("username")}
-              crossOrigin=""
-              size="lg"
-              placeholder={t("feature.login_form.placeholder.username")}
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              {t("feature.login_form.label.password")}
-            </Typography>
-            <Input
-              {...register("password")}
-              crossOrigin=""
-              type="password"
-              size="lg"
-              placeholder={t("feature.login_form.placeholder.password")}
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
+    <div className="flex justify-center items-center w-screen h-screen p-6">
+      <Card className="border-[1px]">
+        <CardBody>
+          <div className="flex justify-between">
+            <div>
+              <Typography variant="h4" color="blue-gray">
+                {t("page.login.title")}
+              </Typography>
+              <Typography color="gray" className="mt-1 font-normal">
+                {t("page.login.desc")}
+              </Typography>
+            </div>
+            <div className="w-fit">
+              <MultilingualMenu variant="short" />
+            </div>
           </div>
-          <Button
-            className="mt-6 flex justify-center items-center gap-x-3"
-            fullWidth
-            type="submit"
-            disabled={pendingLogin}
-            loading={pendingLogin}
+          <form
+            className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+            onSubmit={handleSubmit(onSubmit)}
           >
-            {t("feature.login_form.button.sign_in")}
-          </Button>
-        </form>
+            <div className="mb-1 flex flex-col gap-6">
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                {t("feature.login_form.label.username")}
+              </Typography>
+              <Input
+                {...register("username")}
+                crossOrigin=""
+                size="lg"
+                placeholder={t("feature.login_form.placeholder.username")}
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+              />
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                {t("feature.login_form.label.password")}
+              </Typography>
+              <Input
+                {...register("password")}
+                crossOrigin=""
+                type="password"
+                size="lg"
+                placeholder={t("feature.login_form.placeholder.password")}
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+              />
+            </div>
+            <Button
+              className="mt-6 flex justify-center items-center gap-x-3"
+              fullWidth
+              type="submit"
+              disabled={pendingLogin}
+              loading={pendingLogin}
+            >
+              {t("feature.login_form.button.sign_in")}
+            </Button>
+          </form>
+        </CardBody>
       </Card>
     </div>
   );
