@@ -22,6 +22,8 @@ export const isTimeInRange = (timeStart: string, timeEnd: string): boolean => {
 };
 
 export const checkCanSubmit = (chapterData: Chapter) => {
+  if (!chapterData) return false;
+
   if (
     chapterData.allow_submit_type === ALLOW_PROBLEM_TYPE.always ||
     chapterData.allow_submit_type === ALLOW_PROBLEM_TYPE.timerPaused
@@ -35,13 +37,15 @@ export const checkCanSubmit = (chapterData: Chapter) => {
   ) {
     return isTimeInRange(
       chapterData.submit_time_start,
-      chapterData.submit_time_end
+      chapterData.submit_time_end,
     );
   }
   return false;
 };
 
 export const checkCanAccess = (chapterData: Chapter) => {
+  if (!chapterData) return false;
+
   if (
     chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.always ||
     chapterData.allow_access_type === ALLOW_PROBLEM_TYPE.timerPaused
@@ -55,7 +59,7 @@ export const checkCanAccess = (chapterData: Chapter) => {
   ) {
     return isTimeInRange(
       chapterData.access_time_start,
-      chapterData.access_time_end
+      chapterData.access_time_end,
     );
   }
   return false;

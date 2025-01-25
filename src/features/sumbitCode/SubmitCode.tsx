@@ -102,9 +102,9 @@ const SubmitCode = () => {
   const sortedChapterList = useMemo(
     () =>
       [...chapterList].sort(
-        (a, b) => a.items[0]?.chapter_idx - b.items[0]?.chapter_idx
+        (a, b) => a.items[0]?.chapter_idx - b.items[0]?.chapter_idx,
       ),
-    [chapterList]
+    [chapterList],
   );
 
   const exerciseResult = useMemo(() => {
@@ -135,16 +135,16 @@ const SubmitCode = () => {
           .filter(
             ([, val]) =>
               val.length > 0 &&
-              val.some((item: CheckUserConstraintData) => !item.is_passed)
+              val.some((item: CheckUserConstraintData) => !item.is_passed),
           )
           .reduce(
             (acc, [key, val]) => ({
               ...acc,
               [key]: val.filter(
-                (item: CheckUserConstraintData) => !item.is_passed
+                (item: CheckUserConstraintData) => !item.is_passed,
               ),
             }),
-            {} as Record<string, CheckUserConstraintData[]>
+            {} as Record<string, CheckUserConstraintData[]>,
           );
         Object.entries(errConstraints).map(([key, val]) => {
           val.map((data: CheckUserConstraintData) => {
@@ -162,7 +162,7 @@ const SubmitCode = () => {
                 progress: undefined,
                 theme: "light",
                 transition: Bounce,
-              }
+              },
             );
           });
         });
@@ -176,7 +176,7 @@ const SubmitCode = () => {
           item_id: problem ? parseInt(problem) : null,
           sourcecode: sourcecode,
           job_id: uuid,
-        })
+        }),
       );
       setJobId(uuid);
     } catch (err) {
@@ -222,7 +222,7 @@ const SubmitCode = () => {
   useEffect(() => {
     if (jobId) {
       const evtSource = new EventSource(
-        `${VITE_IPCA_RT}/submission-result/${jobId}`
+        `${VITE_IPCA_RT}/submission-result/${jobId}`,
       );
 
       const entTimeOut = setTimeout(() => {
@@ -239,7 +239,7 @@ const SubmitCode = () => {
             getSubmissionHistory({
               chapter_idx: chapter ? chapter : "",
               item_id: problem ? problem : "",
-            })
+            }),
           );
           dispatch(getChapterList());
           dispatch(getExerciseList());
@@ -311,7 +311,7 @@ const SubmitCode = () => {
       getExercise({
         chapter_idx: chapter ? chapter : "",
         item_id: problem ? problem : "",
-      })
+      }),
     );
     setProblemStepper(STEPPER.problem);
   }, [dispatch, chapter, problem]);
@@ -322,7 +322,7 @@ const SubmitCode = () => {
         getSubmissionHistory({
           chapter_idx: chapter ? chapter : "",
           item_id: problem ? problem : "",
-        })
+        }),
       );
     }
   }, [dispatch, chapter, problem, exercise]);
@@ -337,19 +337,26 @@ const SubmitCode = () => {
     )
       dispatch(
         getCodeFromMinio(
-          submissionHistory[submissionHistory.length - 1].sourcecode_filename
-        )
+          submissionHistory[submissionHistory.length - 1].sourcecode_filename,
+        ),
       );
   }, [dispatch, submissionHistory, codeDisplay]);
 
   useEffect(() => {
-    if (chapter) {
+    if (chapter && chapterList && chapterList.length > 0) {
       setIsCanSubmit(
         checkCanSubmit(chapterList[parseInt(chapter) - 1]) &&
-          exerciseResult?.marking !== exerciseResult?.full_mark
+          exerciseResult?.marking !== exerciseResult?.full_mark,
       );
     }
-  }, [chapter, chapterList, problem]);
+  }, [
+    chapter,
+    chapterList,
+    problem,
+    setIsCanSubmit,
+    checkCanSubmit,
+    exerciseResult,
+  ]);
 
   return (
     <>
