@@ -5,11 +5,15 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import { FAQ } from "../../constants/constants";
 import PageContainer from "../PageContainer";
+import { useTranslation } from "react-i18next";
 
 function FaqPage() {
   const [open, setOpen] = useState(0);
+  const { t } = useTranslation();
+  const faqs = t("page.faq.list", {
+    returnObjects: true,
+  }) as { title: string; desc: string }[];
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   return (
@@ -22,16 +26,11 @@ function FaqPage() {
               color="blue-gray"
               className="mb-4 text-4xl !leading-snug lg:text-[40px]"
             >
-              Frequently asked questions
-            </Typography>
-            <Typography className="mx-auto font-normal text-[18px] !text-gray-500 lg:max-w-3xl">
-              A lot of people don&apos;t appreciate the moment until it&apos;s
-              passed. I&apos;m not trying my hardest, and I&apos;m not trying to
-              do.
+              {t("page.faq.title")}
             </Typography>
           </div>
           <div className="max-w-3xl mx-auto grid gap-6">
-            {FAQ.map(({ title, desc }, index) => (
+            {faqs.map(({ title, desc }, index) => (
               <Accordion open={open === index + 1} key={index}>
                 <AccordionHeader onClick={() => handleOpen(index + 1)}>
                   {title}

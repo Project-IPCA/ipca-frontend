@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks/store";
 import { getSubmissionHistoryState } from "./redux/submissionHistorySlice";
-import { TABLE_HEADER } from "./constants";
 import { Button, Chip, Typography } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
@@ -10,6 +9,7 @@ import TestCaseResult from "./components/TestCaseResult";
 import { TestCaseOutput } from "../../components";
 import CodeDisplay from "../codeDisplay/CodeDisplay";
 import { STEPPER } from "../sumbitCode/constants";
+import { useTranslation } from "react-i18next";
 
 export interface SubmissionResult {
   actual: string;
@@ -39,6 +39,7 @@ function SubmissionHistory({
   onChangeSubmissionDetail,
 }: Props) {
   const submissionHistoryState = useAppSelector(getSubmissionHistoryState);
+  const { t } = useTranslation();
   const { chapter, problem } = useParams();
   const submissionKey = `${chapter}.${problem}`;
   const submissionHistory =
@@ -47,12 +48,19 @@ function SubmissionHistory({
   const submission =
     submissionHistory && submissionHistory.length > 0
       ? submissionHistory.find(
-          (sub) => sub.submission_id === submissionDetail?.submissionId,
+          (sub) => sub.submission_id === submissionDetail?.submissionId
         )
       : null;
 
   const submissionResult: SubmissionResult[] =
     submission && submission.result ? JSON.parse(submission.result) : null;
+
+  const TABLE_HEADER = [
+    t("feature.submit_code.submission.attempt"),
+    t("feature.submit_code.submission.status.title"),
+    t("feature.submit_code.submission.score"),
+    t("feature.submit_code.submission.time"),
+  ];
 
   const getStatusColor = () => {
     if (submission?.status === SUBMISSION_STATUS.accepted) {
@@ -64,17 +72,17 @@ function SubmissionHistory({
   const convertStatus = (status: string) => {
     switch (status) {
       case SUBMISSION_STATUS.accepted:
-        return "Accepted";
+        return t("feature.submit_code.submission.status.accepted");
       case SUBMISSION_STATUS.wrongAnswer:
-        return "Wrong Answer";
+        return t("feature.submit_code.submission.status.wrong_answer");
       case SUBMISSION_STATUS.error:
-        return "Error";
+        return t("feature.submit_code.submission.status.error");
       case SUBMISSION_STATUS.pending:
-        return "Pending";
+        return t("feature.submit_code.submission.status.pending");
       case SUBMISSION_STATUS.rejected:
-        return "Rejected";
+        return t("feature.submit_code.submission.status.rejected");
       default:
-        return "Not Valid";
+        return t("feature.submit_code.submission.status.not_valid");
     }
   };
 
@@ -110,7 +118,7 @@ function SubmissionHistory({
                   (
                     { submission_id, status, time_submit, marking },
                     index,
-                    arr,
+                    arr
                   ) => (
                     <tr
                       key={submission_id}
@@ -118,7 +126,7 @@ function SubmissionHistory({
                       onClick={() => {
                         onChangeSubmissionDetail(
                           submission_id,
-                          arr.length - index,
+                          arr.length - index
                         );
                         onStepperChange(STEPPER.result);
                       }}
@@ -160,11 +168,11 @@ function SubmissionHistory({
                           color="blue-gray"
                           className="font-medium"
                         >
-                          {format(time_submit, "MMM dd, yyyy HH:mm:ss")}
+                          {format(time_submit, "dd/MM/yyyy HH:mm:ss")}
                         </Typography>
                       </td>
                     </tr>
-                  ),
+                  )
                 )}
           </tbody>
         </table>
@@ -176,11 +184,13 @@ function SubmissionHistory({
             className="flex items-center gap-2 p-2"
             onClick={() => onStepperChange(STEPPER.submission)}
           >
-            <ArrowLeftIcon className="w-4 h-4" /> Back
+            <ArrowLeftIcon className="w-4 h-4" />{" "}
+            {t("feature.submit_code.submission.back")}
           </Button>
           <div className="px-6">
             <Typography variant="h4" className="pt-4">
-              Submission #{submissionDetail?.attempt}
+              {t("feature.submit_code.submission.submission")} #
+              {submissionDetail?.attempt}
             </Typography>
             <div className="flex md:flex-row flex-col justify-between md:items-center items-start pt-6 ">
               <div className="flex md:flex-row flex-col md:items-center items-start gap-2">
@@ -190,10 +200,10 @@ function SubmissionHistory({
                   className="rounded-full"
                 />
                 <Typography variant="small">
-                  Submitted at{" "}
+                  {t("feature.submit_code.submission.submitted_at")}{" "}
                   {format(
                     String(submission?.time_submit),
-                    "MMM dd, yyyy HH:mm:ss",
+                    "MMM dd, yyyy HH:mm:ss"
                   )}
                 </Typography>
               </div>
@@ -205,13 +215,13 @@ function SubmissionHistory({
             </div>
             <div className="pt-4">
               <Typography variant="h6" className="mb-2">
-                Sourcecode
+                {t("feature.submit_code.submission.sourcecode")}
               </Typography>
               <CodeDisplay fileName={String(submission?.sourcecode_filename)} />
             </div>
             <div className="pt-4">
               <Typography variant="h6" className="mb-2">
-                Result
+                {t("feature.submit_code.submission.result")}
               </Typography>
               {(submission?.status === SUBMISSION_STATUS.accepted ||
                 submission?.status === SUBMISSION_STATUS.wrongAnswer ||

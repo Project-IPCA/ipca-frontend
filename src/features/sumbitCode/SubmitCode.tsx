@@ -34,6 +34,7 @@ import {
 } from "../codeDisplay/redux/codeDisplaySlice";
 import axiosInstance from "../../utils/axios";
 import axios from "axios";
+import { checkCanSubmit } from "../../utils/function";
 
 export interface SubmissionDetail {
   attempt: number;
@@ -63,6 +64,7 @@ const SubmitCode = () => {
   const [submissionDetail, setSubmissionDetail] =
     useState<SubmissionDetail | null>(null);
   const navigate = useNavigate();
+  const [isCanSubmit, setIsCanSubmit] = useState<boolean>(false);
 
   const exerciseKey = `${chapter}.${problem}`;
   const exercise = exerciseState[exerciseKey]?.exercise || null;
@@ -138,7 +140,9 @@ const SubmitCode = () => {
           .reduce(
             (acc, [key, val]) => ({
               ...acc,
-              [key]: val.filter((item: CheckUserConstraintData) => !item.is_passed),
+              [key]: val.filter(
+                (item: CheckUserConstraintData) => !item.is_passed
+              ),
             }),
             {} as Record<string, CheckUserConstraintData[]>
           );
@@ -211,14 +215,7 @@ const SubmitCode = () => {
         theme: "light",
         transition: Bounce,
       });
-      for (const chapter of allChapterList) {
-        if (chapter.is_open && chapter.last_exercise_success !== 5) {
-          navigate(
-            `/exercise/${chapter.index}/${chapter.last_exercise_success}`
-          );
-          break;
-        }
-      }
+      navigate(`/exercises`);
     }
   }, [exerciseError, allChapterList]);
 
@@ -227,6 +224,14 @@ const SubmitCode = () => {
       const evtSource = new EventSource(
         `${VITE_IPCA_RT}/submission-result/${jobId}`
       );
+
+      const entTimeOut = setTimeout(() => {
+        if (evtSource) {
+          evtSource.close();
+          window.location.reload();
+        }
+      }, 3000);
+
       evtSource.onmessage = (event) => {
         if (event.data) {
           setSubmissionResult(true);
@@ -238,6 +243,8 @@ const SubmitCode = () => {
           );
           dispatch(getChapterList());
           dispatch(getExerciseList());
+          evtSource.close();
+          clearTimeout(entTimeOut);
         }
       };
     }
@@ -335,6 +342,15 @@ const SubmitCode = () => {
       );
   }, [dispatch, submissionHistory, codeDisplay]);
 
+  useEffect(() => {
+    if (chapter) {
+      setIsCanSubmit(
+        checkCanSubmit(chapterList[parseInt(chapter) - 1]) &&
+          exerciseResult?.marking !== exerciseResult?.full_mark
+      );
+    }
+  }, [chapter, chapterList, problem]);
+
   return (
     <>
       <div className="w-full h-full lg:block hidden">
@@ -367,7 +383,7 @@ const SubmitCode = () => {
                 isSubmissionHistoryFetching && submissionResult
               }
               isExerciseExist={!!exercise}
-              canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
+              canSubmit={isCanSubmit}
             />
           </Panel>
         </PanelGroup>
@@ -394,7 +410,7 @@ const SubmitCode = () => {
             isSubmissionHistoryFetching && submissionResult
           }
           isExerciseExist={!!exercise}
-          canSubmit={exerciseResult?.marking !== exerciseResult?.full_mark}
+          canSubmit={isCanSubmit}
         />
       </div>
     </>

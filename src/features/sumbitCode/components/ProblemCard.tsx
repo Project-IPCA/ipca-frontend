@@ -10,6 +10,7 @@ import { TestCaseOutput } from "../../../components";
 import { SubmissionDetail } from "../SubmitCode";
 import { useParams } from "react-router-dom";
 import TextEditor from "./TextEditor";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   name?: string;
@@ -37,6 +38,7 @@ const ProblemCard = ({
   onChangeSubmissionDetail,
 }: Props) => {
   const { chapter, problem } = useParams();
+  const { t } = useTranslation();
   return (
     <Card className="w-full   lg:h-full h-[500px] md:overflow-hidden overflow-auto p-6  border-[1px] shadow-none">
       <div className="flex justify-between border-b-[1px] border-blue-gray pb-4 lg:h-10 ">
@@ -51,7 +53,9 @@ const ProblemCard = ({
               <div className="w-4 h-4">
                 <ClipboardDocumentListIcon />
               </div>
-              <span className="md:block hidden">Problem</span>
+              <span className="md:block hidden">
+                {t("feature.submit_code.problem.title")}
+              </span>
             </Button>
             <Button
               size="sm"
@@ -66,7 +70,9 @@ const ProblemCard = ({
               <div className="w-4 h-4">
                 <QuestionMarkCircleIcon />
               </div>
-              <span className="md:block hidden">Submission History</span>
+              <span className="md:block hidden">
+                {t("feature.submit_code.submission.title")}
+              </span>
             </Button>
           </div>
           <div>
@@ -83,7 +89,9 @@ const ProblemCard = ({
           <>
             <div className="break-words  border-b-[1px] mb-5 pb-5">
               <Typography variant="small" className="pt-4 font-medium">
-                {`Chapter ${chapter || ""} Problem ${problem || ""}`}
+                {`${t("feature.submit_code.problem.chapter")} ${
+                  chapter || ""
+                } ${t("feature.submit_code.problem.problem")} ${problem || ""}`}
               </Typography>
               <Typography variant="h4" className="pt-1 pb-2">
                 {name || ""}
@@ -91,19 +99,23 @@ const ProblemCard = ({
               <TextEditor value={content ?? ""} />
             </div>
             <div className="flex flex-col gap-y-3">
-              {testcaseList
-                ?.filter((testcase) => testcase.show_to_student)
-                .map((testcase, index) => (
-                  <Card
-                    className="px-5 py-3 bg-white border-[1px] shadow-none"
-                    key={testcase.testcase_id}
-                  >
-                    <Typography variant="h6" className="pb-2">
-                      Testcase: {index + 1}
-                    </Typography>
-                    <TestCaseOutput output={testcase.testcase_output} />
-                  </Card>
-                ))}
+              {testcaseList?.map((testcase, index) => (
+                <Card
+                  className="px-5 py-3 bg-white border-[1px] shadow-none"
+                  key={testcase.testcase_id}
+                >
+                  <Typography variant="h6" className="pb-2">
+                    {t("feature.submit_code.problem.testcase")}: {index + 1}
+                  </Typography>
+                  <TestCaseOutput
+                    output={
+                      testcase.show_to_student
+                        ? testcase.testcase_output
+                        : "Testcase Hidden"
+                    }
+                  />
+                </Card>
+              ))}
             </div>
           </>
         )}

@@ -11,8 +11,9 @@ import {
 import { useState } from "react";
 import { Chapter } from "../redux/submitCodeLayoutSlice";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
-import { ALLOW_PROBLEM_TYPE } from "../../constants/constants";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { checkCanAccess } from "../../utils/function";
 
 interface Props {
   data: Chapter;
@@ -23,6 +24,7 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
   const [open, setOpen] = useState<boolean>(true);
   const navigate = useNavigate();
   const { chapter, problem } = useParams();
+  const { t } = useTranslation();
 
   const toggleOpen = () => setOpen((cur) => !cur);
 
@@ -48,20 +50,16 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
         >
           <Chip
             value={
-              data.allow_access_type === ALLOW_PROBLEM_TYPE.always
-                ? "open"
-                : "closed"
+              checkCanAccess(data)
+                ? t("feature.exercise_list.exercise.status.open")
+                : t("feature.exercise_list.exercise.status.closed")
             }
             size="sm"
-            color={
-              data.allow_access_type === ALLOW_PROBLEM_TYPE.always
-                ? "green"
-                : "red"
-            }
+            color={checkCanAccess(data) ? "green" : "red"}
             className="mr-2"
           />
           <Typography color="blue-gray" className="mr-auto font-normal">
-            {`Unit ${chapterIndex} ${data.chapter_name}`}
+            {`${t("feature.exercise_list.exercise.unit")} ${chapterIndex} ${data.chapter_name}`}
           </Typography>
         </AccordionHeader>
       </ListItem>
@@ -72,17 +70,17 @@ const ProblemAccordion = ({ data, chapterIndex, onDrawerClose }: Props) => {
               key={index}
               className={`flex justify-between items-center 
                 ${item.chapter_idx == Number(chapter) && item.item_idx == Number(problem) ? "bg-blue-gray-50" : ""}`}
-              disabled={data.allow_access_type === ALLOW_PROBLEM_TYPE.deny}
+              disabled={!checkCanAccess(data)}
               onClick={() => onChangeProblem(item.chapter_idx, item.item_idx)}
             >
               <div className="flex">
-                {data.allow_access_type !== ALLOW_PROBLEM_TYPE.always && (
+                {checkCanAccess(data) && (
                   <div className="w-6 h-6">
                     <LockClosedIcon />
                   </div>
                 )}
                 <Typography className="pl-2">
-                  Problem {item.item_idx}
+                  {t("layout.submit_code.menu.problem")} {item.item_idx}
                 </Typography>
               </div>
               <Chip

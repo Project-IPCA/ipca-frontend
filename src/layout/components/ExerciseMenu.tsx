@@ -10,6 +10,7 @@ import { parseInt } from "lodash";
 import { useAppSelector } from "../../hooks/store";
 import { getChapterListState } from "../redux/submitCodeLayoutSlice";
 import { ALLOW_PROBLEM_TYPE } from "../../constants/constants";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   toggleDrawer: () => void;
@@ -20,6 +21,7 @@ const ExerciseMenu = ({ toggleDrawer, handleCloseNav }: Props) => {
   const navigate = useNavigate();
   const { chapter, problem } = useParams();
   const chapterList = useAppSelector(getChapterListState);
+  const { t } = useTranslation();
 
   const sortedChapterList = useMemo(
     () =>
@@ -87,7 +89,9 @@ const ExerciseMenu = ({ toggleDrawer, handleCloseNav }: Props) => {
           {createElement(Squares2X2Icon, {
             className: "h-[18px] w-[18px]",
           })}{" "}
-          <span className="text-gray-900">Problem List</span>
+          <span className="text-gray-900">
+            {t("layout.submit_code.menu.problem_list")}
+          </span>
         </MenuItem>
       </Typography>
       <div>
