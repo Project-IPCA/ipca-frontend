@@ -40,6 +40,8 @@ function MultilingualMenu({ variant = "long" }: Props) {
         return variant === "long" ? flagTh : flagCirTh;
       case LANGUAGE.en:
         return variant === "long" ? flagEn : flagCirEn;
+      default:
+        return variant === "long" ? flagEn : flagCirEn;
     }
   };
 
@@ -49,7 +51,6 @@ function MultilingualMenu({ variant = "long" }: Props) {
         <Button
           variant="text"
           color="blue-gray"
-          // className="flex items-center gap-1  py-0.5 pr-0.5 pl-0.5 lg:ml-auto "
           className={`flex items-center  text-md font-medium capitalize ${variant === "long" ? "p-2" : "p-0 !rounded-full"}`}
         >
           <Avatar
