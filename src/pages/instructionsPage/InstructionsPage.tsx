@@ -5,9 +5,12 @@ import { useMemo } from "react";
 
 function InstructionsPage() {
   const { t } = useTranslation();
-  const instructions = t("page.instructions.list", {
-    returnObjects: true,
-  }) as string[];
+
+  const instructions = Array.isArray(
+    t("page.instructions.list", { returnObjects: true }),
+  )
+    ? (t("page.instructions.list", { returnObjects: true }) as string[])
+    : [];
 
   const instructionsObj = useMemo(
     () => instructions.map((ins) => ({ desc: ins })),
