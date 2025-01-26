@@ -11,9 +11,15 @@ import { useTranslation } from "react-i18next";
 function FaqPage() {
   const [open, setOpen] = useState(0);
   const { t } = useTranslation();
-  const faqs = t("page.faq.list", {
-    returnObjects: true,
-  }) as { title: string; desc: string }[];
+  const faqs = Array.isArray(
+    t("page.faq.list", {
+      returnObjects: true,
+    }),
+  )
+    ? (t("page.faq.list", {
+        returnObjects: true,
+      }) as { title: string; desc: string }[])
+    : [];
 
   const handleOpen = (value: number) => setOpen(open === value ? 0 : value);
   return (

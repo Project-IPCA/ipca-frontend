@@ -5,9 +5,15 @@ import { useMemo } from "react";
 
 function ExaminationPage() {
   const { t } = useTranslation();
-  const exams = t("page.examination.list", {
-    returnObjects: true,
-  }) as string[];
+  const exams = Array.isArray(
+    t("page.examination.list", {
+      returnObjects: true,
+    }),
+  )
+    ? (t("page.examination.list", {
+        returnObjects: true,
+      }) as string[])
+    : [];
 
   const examsObj = useMemo(() => exams.map((ex) => ({ desc: ex })), [t]);
 
