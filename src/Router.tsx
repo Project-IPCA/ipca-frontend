@@ -27,9 +27,12 @@ const ExaminationPage = lazy(
 );
 const ProfilePage = lazy(() => import("./pages/profilePage/ProfilePage"));
 
+const ErrorPage = lazy(() => import("./pages/errorPage/ErrorPage"));
+
 const router = createBrowserRouter([
   {
     element: <AnonymousRoutes />,
+    errorElement: <Navigate to="/error" replace />,
     children: [
       {
         path: "/login",
@@ -43,6 +46,7 @@ const router = createBrowserRouter([
   },
   {
     element: <ProtectedRoutes />,
+    errorElement: <Navigate to="/error" replace />,
     children: [
       {
         element: <Layout />,
@@ -120,6 +124,15 @@ const router = createBrowserRouter([
       </Suspense>
     ),
   },
+  {
+    path: "/error",
+    element: (
+      <Suspense fallback={<SpinnerLoading />}>
+        <ErrorPage />
+      </Suspense>
+    ),
+  },
+
   {
     path: "*",
     element: <Navigate to="/404page" replace />,
