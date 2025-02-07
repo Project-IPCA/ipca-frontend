@@ -23,6 +23,7 @@ interface Props {
   submissionDetail: SubmissionDetail | null;
   onChangeSubmissionDetail: (submissionId: string, attempt: number) => void;
   onStepperChange: (step: string) => void;
+  isFetching: boolean;
 }
 
 const ProblemCard = ({
@@ -36,6 +37,7 @@ const ProblemCard = ({
   onStepperChange,
   submissionDetail,
   onChangeSubmissionDetail,
+  isFetching,
 }: Props) => {
   const { chapter, problem } = useParams();
   const { t } = useTranslation();
@@ -44,43 +46,70 @@ const ProblemCard = ({
       <div className="flex justify-between border-b-[1px] border-blue-gray pb-4 lg:h-10 ">
         <div className="flex gap-x-2 justify-between w-full items-center">
           <div className="flex gap-x-2  gap-y-2">
-            <Button
-              size="sm"
-              variant={stepper === STEPPER.problem ? "filled" : "outlined"}
-              className="rounded-full flex items-center justify-center gap-x-1 "
-              onClick={() => onStepperChange(STEPPER.problem)}
-            >
-              <div className="w-4 h-4">
-                <ClipboardDocumentListIcon />
-              </div>
-              <span className="md:block hidden">
-                {t("feature.submit_code.problem.title")}
-              </span>
-            </Button>
-            <Button
-              size="sm"
-              variant={
-                stepper === STEPPER.submission || stepper === STEPPER.result
-                  ? "filled"
-                  : "outlined"
-              }
-              className="rounded-full flex items-center justify-center gap-x-1"
-              onClick={() => onStepperChange(STEPPER.submission)}
-            >
-              <div className="w-4 h-4">
-                <QuestionMarkCircleIcon />
-              </div>
-              <span className="md:block hidden">
-                {t("feature.submit_code.submission.title")}
-              </span>
-            </Button>
+            {isFetching ? (
+              <Typography
+                as="div"
+                className="block  h-8 w-28 rounded-full bg-gray-300"
+              >
+                &nbsp;
+              </Typography>
+            ) : (
+              <Button
+                size="sm"
+                variant={stepper === STEPPER.problem ? "filled" : "outlined"}
+                className="rounded-full flex items-center justify-center gap-x-1 "
+                onClick={() => onStepperChange(STEPPER.problem)}
+              >
+                <div className="w-4 h-4">
+                  <ClipboardDocumentListIcon />
+                </div>
+                <span className="md:block hidden">
+                  {t("feature.submit_code.problem.title")}
+                </span>
+              </Button>
+            )}
+            {isFetching ? (
+              <Typography
+                as="div"
+                className="block  h-8 w-28 rounded-full bg-gray-300"
+              >
+                &nbsp;
+              </Typography>
+            ) : (
+              <Button
+                size="sm"
+                variant={
+                  stepper === STEPPER.submission || stepper === STEPPER.result
+                    ? "filled"
+                    : "outlined"
+                }
+                className="rounded-full flex items-center justify-center gap-x-1"
+                onClick={() => onStepperChange(STEPPER.submission)}
+              >
+                <div className="w-4 h-4">
+                  <QuestionMarkCircleIcon />
+                </div>
+                <span className="md:block hidden">
+                  {t("feature.submit_code.submission.title")}
+                </span>
+              </Button>
+            )}
           </div>
           <div>
-            <Chip
-              value={`${marking}/${fullMark}`}
-              color={marking === fullMark ? "green" : "blue-gray"}
-              size="lg"
-            />
+            {isFetching ? (
+              <Typography
+                as="div"
+                className="block  h-8 w-12 rounded-lg bg-gray-300"
+              >
+                &nbsp;
+              </Typography>
+            ) : (
+              <Chip
+                value={`${marking || 0}/${fullMark || 2}`}
+                color={marking && marking === fullMark ? "green" : "blue-gray"}
+                size="lg"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -88,35 +117,102 @@ const ProblemCard = ({
         {stepper === STEPPER.problem && (
           <>
             <div className="break-words  border-b-[1px] mb-5 pb-5">
-              <Typography variant="small" className="pt-4 font-medium">
-                {`${t("feature.submit_code.problem.chapter")} ${
-                  chapter || ""
-                } ${t("feature.submit_code.problem.problem")} ${problem || ""}`}
-              </Typography>
-              <Typography variant="h4" className="pt-1 pb-2">
-                {name || ""}
-              </Typography>
-              <TextEditor value={content ?? ""} />
-            </div>
-            <div className="flex flex-col gap-y-3">
-              {testcaseList?.map((testcase, index) => (
-                <Card
-                  className="px-5 py-3 bg-white border-[1px] shadow-none"
-                  key={testcase.testcase_id}
+              {isFetching ? (
+                <Typography
+                  as="div"
+                  variant="small"
+                  className="block mt-4 h-3 w-24 rounded-lg bg-gray-300"
                 >
-                  <Typography variant="h6" className="pb-2">
-                    {t("feature.submit_code.problem.testcase")}: {index + 1}
+                  &nbsp;
+                </Typography>
+              ) : (
+                <Typography variant="small" className="pt-4 font-medium">
+                  {`${t("feature.submit_code.problem.chapter")} ${
+                    chapter || ""
+                  } ${t("feature.submit_code.problem.problem")} ${problem || ""}`}
+                </Typography>
+              )}
+              {isFetching ? (
+                <Typography
+                  as="div"
+                  variant="small"
+                  className="block mt-4 mb-6 h-5 w-1/3 rounded-lg bg-gray-300"
+                >
+                  &nbsp;
+                </Typography>
+              ) : (
+                <Typography variant="h4" className="pt-1 pb-2">
+                  {name || ""}
+                </Typography>
+              )}
+              {isFetching ? (
+                <>
+                  {Array.from({ length: 9 }).map((_, index) => (
+                    <Typography
+                      as="div"
+                      variant="paragraph"
+                      className="mb-3 h-2 w-full rounded-full bg-gray-300"
+                      key={index}
+                    >
+                      &nbsp;
+                    </Typography>
+                  ))}
+                  <Typography
+                    as="div"
+                    variant="paragraph"
+                    className="mb-3 h-2 w-11/12 rounded-full bg-gray-300"
+                  >
+                    &nbsp;
                   </Typography>
-                  <TestCaseOutput
-                    output={
-                      testcase.show_to_student
-                        ? testcase.testcase_output
-                        : "Testcase Hidden"
-                    }
-                  />
-                </Card>
-              ))}
+                </>
+              ) : (
+                <TextEditor value={content ?? ""} />
+              )}
             </div>
+            {isFetching ? (
+              <div className="flex flex-col gap-y-3">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <Card
+                    key={index}
+                    className="px-5 py-3 bg-white border-[1px] shadow-none"
+                  >
+                    <Typography
+                      as="div"
+                      variant="paragraph"
+                      className="h-2 w-16 rounded-full bg-gray-300"
+                    >
+                      &nbsp;
+                    </Typography>
+                    <Typography
+                      as="div"
+                      className="h-7 w-full rounded-lg bg-gray-300 mt-3"
+                    >
+                      &nbsp;
+                    </Typography>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-y-3">
+                {testcaseList?.map((testcase, index) => (
+                  <Card
+                    className="px-5 py-3 bg-white border-[1px] shadow-none"
+                    key={testcase.testcase_id}
+                  >
+                    <Typography variant="h6" className="pb-2">
+                      {t("feature.submit_code.problem.testcase")}: {index + 1}
+                    </Typography>
+                    <TestCaseOutput
+                      output={
+                        testcase.show_to_student
+                          ? testcase.testcase_output
+                          : "Testcase Hidden"
+                      }
+                    />
+                  </Card>
+                ))}
+              </div>
+            )}
           </>
         )}
         {(stepper === STEPPER.submission || stepper === STEPPER.result) && (

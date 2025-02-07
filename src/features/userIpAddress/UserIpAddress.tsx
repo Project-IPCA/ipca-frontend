@@ -6,12 +6,13 @@ import {
   getUserIpAddressFetching,
 } from "./redux/UserIpAddress";
 import { useEffect } from "react";
+import { getProfileStatus } from "../profile/redux/profileSlice";
 
 function UserIpAddress() {
   const dispatch = useAppDispatch();
   const ipAddress = useAppSelector(getUserIpAddress);
-  const isFetching = useAppSelector(getUserIpAddressFetching);
-
+  const isProfileFetching = useAppSelector(getProfileStatus);
+  const isIpFetching = useAppSelector(getUserIpAddressFetching);
   useEffect(() => {
     if (!ipAddress.ip) {
       dispatch(fetchUserIPAddress());
@@ -20,7 +21,7 @@ function UserIpAddress() {
 
   return (
     <>
-      {isFetching ? (
+      {isProfileFetching || isIpFetching ? (
         <Typography
           as="div"
           variant="paragraph"

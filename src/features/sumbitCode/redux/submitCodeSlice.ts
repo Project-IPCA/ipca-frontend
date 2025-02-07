@@ -13,7 +13,7 @@ interface Params {
 
 interface SubmitExerciseRequest {
   chapter_id: string | null;
-  chapter_idx : number | null;
+  chapter_idx: number | null;
   item_id: number | null;
   sourcecode: string | null;
   job_id: string | null;
@@ -36,7 +36,7 @@ export interface UserConstraintData {
   keyword: string;
   limit: number;
   active: boolean;
-  type: ConstraintType
+  type: ConstraintType;
 }
 
 export interface SuggestedConstraint {
@@ -57,8 +57,8 @@ export interface UserConstraint {
   variables: UserConstraintData[];
 }
 
-export interface CheckUserConstraintData extends UserConstraintData{
-  is_passed : boolean
+export interface CheckUserConstraintData extends UserConstraintData {
+  is_passed: boolean;
 }
 
 export interface CheckUserConstraint {
@@ -85,10 +85,10 @@ interface Exercise {
   full_mark: number;
   level: string;
   name: string;
-  suggested_constraints: SuggestedConstraint
+  suggested_constraints: SuggestedConstraint;
   testcase: string;
   testcase_list: Testcase[];
-  user_defined_constraints: UserConstraint
+  user_defined_constraints: UserConstraint;
 }
 
 interface ExerciseState {
@@ -116,14 +116,14 @@ export const getExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  }
+  },
 );
 
 export const submitExercise = createAsyncThunk(
   "submitCode/sumbitExercise",
   async (
     { chapter_id, item_id, sourcecode, job_id }: SubmitExerciseRequest,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axiosInstance.post(`/student/exercise_submit`, {
@@ -136,7 +136,7 @@ export const submitExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  }
+  },
 );
 
 const submitCodeSlice = createSlice({
@@ -169,10 +169,10 @@ const submitCodeSlice = createSlice({
           error: action.payload as API_ERROR_RESPONSE,
         };
       })
-      .addCase(submitExercise.rejected,(state, action)=>{
+      .addCase(submitExercise.rejected, (state, action) => {
         const { chapter_idx, item_id } = action.meta.arg;
         state[`${chapter_idx}.${item_id}`] = {
-          exercise : state[`${chapter_idx}.${item_id}`].exercise,
+          exercise: state[`${chapter_idx}.${item_id}`].exercise,
           isFetching: false,
           error: action.payload as API_ERROR_RESPONSE,
         };
@@ -180,5 +180,6 @@ const submitCodeSlice = createSlice({
 });
 
 export const getExerciseState = (state: RootState) => state.exercise;
+export const getExerciseStatus = (state: RootState) => state.exercise;
 
 export default submitCodeSlice.reducer;
