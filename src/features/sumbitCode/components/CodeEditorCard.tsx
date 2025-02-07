@@ -13,6 +13,7 @@ interface Props {
   isExerciseExist: boolean;
   canSubmit: boolean;
   lastSubmitSourcecode?: string | null;
+  isFetching: boolean;
 }
 
 const CodeEditorCard = ({
@@ -23,6 +24,7 @@ const CodeEditorCard = ({
   isExerciseExist,
   canSubmit,
   lastSubmitSourcecode,
+  isFetching,
 }: Props) => {
   const codeMirrorRef = useRef<HTMLDivElement | null>(null);
   const [codeMirrorHeight, setCodeMirrorHeight] = useState<number>(0);
@@ -52,14 +54,33 @@ const CodeEditorCard = ({
     <Card className="w-full p-6 lg:h-full h-[500px]  border-[1px] shadow-none">
       <div className="flex justify-between border-b-[1px] border-blue-gray pb-3">
         <div className="flex gap-x-1 items-center">
-          <div className="w-5 h-5">
-            <CodeBracketIcon />
-          </div>
-          <Typography variant="h6">
-            {t("feature.submit_code.editor.title")}
-          </Typography>
+          {isFetching ? (
+            <Typography
+              as="div"
+              variant="h6"
+              className="block  h-3 mb-3  w-24 rounded-lg bg-gray-300"
+            >
+              &nbsp;
+            </Typography>
+          ) : (
+            <>
+              <div className="w-5 h-5">
+                <CodeBracketIcon />
+              </div>
+              <Typography variant="h6">
+                {t("feature.submit_code.editor.title")}
+              </Typography>
+            </>
+          )}
         </div>
-        {isEditCode ? (
+        {isFetching ? (
+          <Typography
+            as="div"
+            className="block  h-8 w-16 rounded-lg bg-gray-300"
+          >
+            &nbsp;
+          </Typography>
+        ) : isEditCode ? (
           <Button
             size="sm"
             onClick={onSubmitCode}
@@ -69,18 +90,24 @@ const CodeEditorCard = ({
           </Button>
         ) : null}
       </div>
-      <div className="h-full overflow-auto" ref={codeMirrorRef}>
-        <CodeMirror
-          height={`${codeMirrorHeight}px`}
-          value={getSourcecodeDisplay()}
-          extensions={[python()]}
-          onChange={onChange}
-          placeholder={t("feature.submit_code.editor.placeholder")}
-          readOnly={!isEditCode}
-          editable={isEditCode}
-          autoFocus={isEditCode}
-        />
-      </div>
+      {isFetching ? (
+        <div className="grid w-full h-full mt-2  animate-pulse place-items-center rounded-lg bg-gray-300">
+          <CodeBracketIcon className="h-12 w-12 text-gray-500" />
+        </div>
+      ) : (
+        <div className="h-full overflow-auto" ref={codeMirrorRef}>
+          <CodeMirror
+            height={`${codeMirrorHeight}px`}
+            value={getSourcecodeDisplay()}
+            extensions={[python()]}
+            onChange={onChange}
+            placeholder={t("feature.submit_code.editor.placeholder")}
+            readOnly={!isEditCode}
+            editable={isEditCode}
+            autoFocus={isEditCode}
+          />
+        </div>
+      )}
     </Card>
   );
 };
