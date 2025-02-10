@@ -1,10 +1,11 @@
-import { Input, Select, Option } from "@material-tailwind/react";
+import { Input, Select, Option, Typography } from "@material-tailwind/react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { ProfileInfo } from "../Profile";
-import { Dept, ProfileData } from "../redux/profileSlice";
+import { Dept, getProfileStatus, ProfileData } from "../redux/profileSlice";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LANGUAGE } from "../../../constants/constants";
+import { useAppSelector } from "../../../hooks/store";
 
 interface Props {
   register: UseFormRegister<ProfileInfo>;
@@ -16,6 +17,7 @@ function Contact({ register, setValue, formData }: Props) {
   const [selectedDept, setSelectedDept] = useState<string>();
   const [depts, setDepts] = useState<Dept[]>();
   const { t, i18n } = useTranslation();
+  const isFetching = useAppSelector(getProfileStatus);
 
   useEffect(() => {
     if (!depts && formData?.selected?.departments?.length > 0) {
@@ -30,7 +32,19 @@ function Contact({ register, setValue, formData }: Props) {
     setValue("dept_id", selectedDept ? selectedDept : "");
   }, [selectedDept]);
 
-  return (
+  return isFetching ? (
+    <>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Typography
+          as="div"
+          className="block  h-10 w-full rounded-lg bg-gray-300"
+          key={index}
+        >
+          &nbsp;
+        </Typography>
+      ))}
+    </>
+  ) : (
     <>
       {depts && (
         <Select

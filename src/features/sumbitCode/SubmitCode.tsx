@@ -69,6 +69,7 @@ const SubmitCode = () => {
   const exerciseKey = `${chapter}.${problem}`;
   const exercise = exerciseState[exerciseKey]?.exercise || null;
   const exerciseError = exerciseState[exerciseKey]?.error || null;
+  const isFetching = exerciseState[exerciseKey]?.isFetching;
 
   const submissionKey = `${chapter}.${problem}`;
   const submissionHistory =
@@ -374,6 +375,7 @@ const SubmitCode = () => {
               onStepperChange={onProblemStepperChange}
               submissionDetail={submissionDetail}
               onChangeSubmissionDetail={onChangeSubmissionDetail}
+              isFetching={isFetching}
             />
           </Panel>
 
@@ -391,6 +393,7 @@ const SubmitCode = () => {
               }
               isExerciseExist={!!exercise}
               canSubmit={isCanSubmit}
+              isFetching={isFetching}
             />
           </Panel>
         </PanelGroup>
@@ -407,6 +410,7 @@ const SubmitCode = () => {
           onStepperChange={onProblemStepperChange}
           submissionDetail={submissionDetail}
           onChangeSubmissionDetail={onChangeSubmissionDetail}
+          isFetching={isFetching}
         />
         <CodeEditorCard
           sourcecode={sourcecode}
@@ -418,6 +422,7 @@ const SubmitCode = () => {
           }
           isExerciseExist={!!exercise}
           canSubmit={isCanSubmit}
+          isFetching={isFetching}
         />
       </div>
     </>

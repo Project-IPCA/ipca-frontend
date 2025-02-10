@@ -1,7 +1,11 @@
 import { Card, Chip, Progress, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { ExerciseInfo } from "../redux/exerciseListSlice";
+import {
+  ExerciseInfo,
+  getExercciseListStatus,
+} from "../redux/exerciseListSlice";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../../hooks/store";
 
 const ExerciseCard = ({
   index,
@@ -12,6 +16,7 @@ const ExerciseCard = ({
   last_exercise_success,
 }: ExerciseInfo) => {
   const navigate = useNavigate();
+  const isFetching = useAppSelector(getExercciseListStatus);
   const { t } = useTranslation();
   return (
     <Card
@@ -23,29 +28,69 @@ const ExerciseCard = ({
       }}
     >
       <div>
-        <Chip
-          value={
-            is_open
-              ? t("feature.exercise_list.exercise.status.open")
-              : t("feature.exercise_list.exercise.status.closed")
-          }
-          className={`w-fit ${is_open ? "bg-green-400" : "bg-red-400"}`}
-        />
-        <Typography variant="lead" className="mt-4">
-          {t("feature.exercise_list.exercise.unit")} {index}: {name}
-        </Typography>
+        {isFetching ? (
+          <Typography
+            as="div"
+            variant="lead"
+            className="h-5 w-14 rounded-full bg-gray-300"
+          >
+            &nbsp;
+          </Typography>
+        ) : (
+          <Chip
+            value={
+              is_open
+                ? t("feature.exercise_list.exercise.status.open")
+                : t("feature.exercise_list.exercise.status.closed")
+            }
+            className={`w-fit ${is_open ? "bg-green-400" : "bg-red-400"}`}
+          />
+        )}
+        {isFetching ? (
+          <Typography
+            as="div"
+            variant="lead"
+            className="mt-4 h-3 w-11/12 rounded-full bg-gray-300"
+          >
+            &nbsp;
+          </Typography>
+        ) : (
+          <Typography variant="lead" className="mt-4">
+            {t("feature.exercise_list.exercise.unit")} {index}: {name}
+          </Typography>
+        )}
       </div>
       <div>
         <div className="mb-2 flex items-center justify-end gap-4">
-          <Typography
-            color="blue-gray"
-            variant="h6"
-            className={is_open ? "" : "text-gray-500"}
-          >
-            {marking}/{full_mark}
-          </Typography>
+          {isFetching ? (
+            <Typography
+              as="div"
+              variant="h6"
+              className="h-5 mb-1 w-14 rounded-full bg-gray-300"
+            >
+              &nbsp;
+            </Typography>
+          ) : (
+            <Typography
+              color="blue-gray"
+              variant="h6"
+              className={is_open ? "" : "text-gray-500"}
+            >
+              {marking}/{full_mark}
+            </Typography>
+          )}
         </div>
-        <Progress value={(marking / full_mark) * 100} />
+        {isFetching ? (
+          <Typography
+            as="div"
+            variant="lead"
+            className=" h-3 w-full rounded-full bg-gray-300"
+          >
+            &nbsp;
+          </Typography>
+        ) : (
+          <Progress value={(marking / full_mark) * 100} />
+        )}
       </div>
     </Card>
   );

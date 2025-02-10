@@ -1,10 +1,12 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Input } from "@material-tailwind/react";
+import { Card, Input, Typography } from "@material-tailwind/react";
 import ExerciseCard from "./components/ExerciseCard";
 import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   clearExerciseListError,
+  ExerciseInfo,
+  getExercciseListStatus,
   getExerciseList,
   getExerciseListError,
   getExerciseListState,
@@ -17,6 +19,7 @@ const ExerciseList = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(getExerciseListState);
   const error = useAppSelector(getExerciseListError);
+  const isFetching = useAppSelector(getExercciseListStatus);
   const [search, setSearch] = useState<string>("");
   const { t } = useTranslation();
 
@@ -52,16 +55,32 @@ const ExerciseList = () => {
     }
   }, [error, dispatch]);
 
+  const getDataByFetching = isFetching
+    ? (Array.from({ length: 15 }) as ExerciseInfo[])
+    : filteredData;
+
   return (
     <div>
-      <Input
-        crossOrigin=""
-        label={t("feature.exercise_list.search")}
-        icon={<MagnifyingGlassIcon />}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {isFetching ? (
+        <Card className="shadow-none border-[1px]  w-full h-10 flex flex-row justify-between items-center rounded-md px-3">
+          <Typography
+            as="div"
+            className="block  h-2 w-16 rounded-lg bg-gray-300"
+          >
+            &nbsp;
+          </Typography>
+          <MagnifyingGlassIcon className="w-5 h-5 text-gray-300" />
+        </Card>
+      ) : (
+        <Input
+          crossOrigin=""
+          label={t("feature.exercise_list.search")}
+          icon={<MagnifyingGlassIcon />}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      )}
       <div className="grid gap-8 mt-8 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
-        {filteredData.map((item, index) => (
+        {getDataByFetching.map((item, index) => (
           <ExerciseCard {...item} key={index} />
         ))}
       </div>

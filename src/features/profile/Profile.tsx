@@ -32,7 +32,9 @@ export interface ProfileInfo {
 function Profile() {
   const initialized = useRef(false);
   const dispatch = useAppDispatch();
-  const { data, isUpdating, error } = useAppSelector((state) => state.profile);
+  const { data, isUpdating, error, isFetching } = useAppSelector(
+    (state) => state.profile,
+  );
   const { register, handleSubmit, reset, setValue } = useForm<ProfileInfo>();
   const [profileImage, setProfileImage] = useState<string>("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
@@ -128,9 +130,19 @@ function Profile() {
               onImageChange={handleImageChange}
               onFileChange={handleFileChange}
             />
-            <Typography variant="h4" color="blue-gray">
-              {t("feature.profile.personal.title")}
-            </Typography>
+            {isFetching ? (
+              <Typography
+                as="div"
+                variant="h4"
+                className="block h-5 w-44 rounded-full bg-gray-300"
+              >
+                &nbsp;
+              </Typography>
+            ) : (
+              <Typography variant="h4" color="blue-gray">
+                {t("feature.profile.personal.title")}
+              </Typography>
+            )}
             <PersonalInfo
               register={register}
               setValue={setValue}
@@ -139,9 +151,20 @@ function Profile() {
           </Card>
           <div className="lg:h-full flex flex-col gap-y-5 md:w-1/2">
             <Card className="h-1/2 p-6 space-y-5 border-[1px]">
-              <Typography variant="h4" color="blue-gray">
-                {t("feature.profile.contact.title")}
-              </Typography>
+              {isFetching ? (
+                <Typography
+                  as="div"
+                  variant="h4"
+                  className="block h-5 w-44 rounded-full bg-gray-300"
+                >
+                  &nbsp;
+                </Typography>
+              ) : (
+                <Typography variant="h4" color="blue-gray">
+                  {t("feature.profile.contact.title")}
+                </Typography>
+              )}
+
               <Contact
                 register={register}
                 setValue={setValue}
@@ -149,31 +172,60 @@ function Profile() {
               />
             </Card>
             <Card className="h-1/2 p-6 space-y-5 border-[1px]">
-              <Typography variant="h4" color="blue-gray">
-                {t("feature.profile.password.title")}
-              </Typography>
+              {isFetching ? (
+                <Typography
+                  as="div"
+                  variant="h4"
+                  className="block h-5 w-44 rounded-full bg-gray-300"
+                >
+                  &nbsp;
+                </Typography>
+              ) : (
+                <Typography variant="h4" color="blue-gray">
+                  {t("feature.profile.password.title")}
+                </Typography>
+              )}
+
               <ResetPassword register={register} />
             </Card>
           </div>
         </div>
         <div className=" w-full container mx-auto flex md:flex-row flex-col gap-5 max-w-5xl justify-end mt-5">
           <div className="lg:w-72">
-            <Input
-              crossOrigin=""
-              size="lg"
-              placeholder={t("feature.profile.password.current_password")}
-              label={t("feature.profile.password.current_password")}
-              type="password"
-              {...register("current_password")}
-            />
+            {isFetching ? (
+              <Typography
+                as="div"
+                className="block  h-10 w-full rounded-lg bg-gray-300"
+              >
+                &nbsp;
+              </Typography>
+            ) : (
+              <Input
+                crossOrigin=""
+                size="lg"
+                placeholder={t("feature.profile.password.current_password")}
+                label={t("feature.profile.password.current_password")}
+                type="password"
+                {...register("current_password")}
+              />
+            )}
           </div>
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            disabled={isUpdating}
-            loading={isUpdating}
-          >
-            {t("common.button.submit")}
-          </Button>
+          {isFetching ? (
+            <Typography
+              as="div"
+              className="block  h-10 w-24 rounded-lg bg-gray-300"
+            >
+              &nbsp;
+            </Typography>
+          ) : (
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              disabled={isUpdating}
+              loading={isUpdating}
+            >
+              {t("common.button.submit")}
+            </Button>
+          )}
         </div>
       </div>
     </div>
