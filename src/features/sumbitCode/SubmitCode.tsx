@@ -58,6 +58,7 @@ const SubmitCode = () => {
   const submissionInitialize = useRef(false);
   const { chapter, problem } = useParams();
   const [sourcecode, setSourcecode] = useState<string>("");
+  const [isDirty, setIsDirty] = useState<boolean>(false);
   const [jobId, setJobId] = useState<string>();
   const [submissionResult, setSubmissionResult] = useState<boolean>(false);
   const [problemStepper, setProblemStepper] = useState<string>(STEPPER.problem);
@@ -99,6 +100,10 @@ const SubmitCode = () => {
   const onChange = useCallback((val: string) => {
     setSourcecode(val);
   }, []);
+
+  useEffect(() => {
+    setIsDirty(sourcecode != "");
+  }, [sourcecode]);
 
   const sortedChapterList = useMemo(
     () =>
@@ -394,6 +399,7 @@ const SubmitCode = () => {
               isExerciseExist={!!exercise}
               canSubmit={isCanSubmit}
               isFetching={isFetching}
+              isDirty={isDirty}
             />
           </Panel>
         </PanelGroup>
@@ -423,6 +429,7 @@ const SubmitCode = () => {
           isExerciseExist={!!exercise}
           canSubmit={isCanSubmit}
           isFetching={isFetching}
+          isDirty={isDirty}
         />
       </div>
     </>
