@@ -14,6 +14,7 @@ interface Props {
   canSubmit: boolean;
   lastSubmitSourcecode?: string | null;
   isFetching: boolean;
+  isDirty: boolean;
 }
 
 const CodeEditorCard = ({
@@ -25,6 +26,7 @@ const CodeEditorCard = ({
   canSubmit,
   lastSubmitSourcecode,
   isFetching,
+  isDirty,
 }: Props) => {
   const codeMirrorRef = useRef<HTMLDivElement | null>(null);
   const [codeMirrorHeight, setCodeMirrorHeight] = useState<number>(0);
@@ -85,6 +87,7 @@ const CodeEditorCard = ({
             size="sm"
             onClick={onSubmitCode}
             loading={isSubmissionHistoryFetching}
+            disabled={!isDirty}
           >
             {t("feature.submit_code.editor.submit")}
           </Button>
