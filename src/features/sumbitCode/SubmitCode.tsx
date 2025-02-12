@@ -71,6 +71,7 @@ const SubmitCode = () => {
   const exercise = exerciseState[exerciseKey]?.exercise || null;
   const exerciseError = exerciseState[exerciseKey]?.error || null;
   const isFetching = exerciseState[exerciseKey]?.isFetching;
+  const isSubmit = exerciseState[exerciseKey]?.isSubmit;
 
   const submissionKey = `${chapter}.${problem}`;
   const submissionHistory =
@@ -400,6 +401,7 @@ const SubmitCode = () => {
               canSubmit={isCanSubmit}
               isFetching={isFetching}
               isDirty={isDirty}
+              isSubmit={isSubmit}
             />
           </Panel>
         </PanelGroup>
@@ -430,6 +432,7 @@ const SubmitCode = () => {
           canSubmit={isCanSubmit}
           isFetching={isFetching}
           isDirty={isDirty}
+          isSubmit={isSubmit}
         />
       </div>
     </>
