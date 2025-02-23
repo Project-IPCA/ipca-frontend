@@ -5,6 +5,7 @@ import {
   getCodeFromMinio,
 } from "./redux/codeDisplaySlice";
 import CodeMirror from "@uiw/react-codemirror";
+import { cpp } from "@codemirror/lang-cpp";
 import { python } from "@codemirror/lang-python";
 
 interface Props {
@@ -28,7 +29,7 @@ const CodeDisplay = ({ fileName }: Props) => {
       className="border-[1px]"
       height="auto"
       value={String(code)}
-      extensions={[python()]}
+      extensions={[python(), cpp()]}
       readOnly={true}
       editable={false}
       autoFocus={false}
