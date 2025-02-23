@@ -2,8 +2,13 @@ import { Card, Typography, Button } from "@material-tailwind/react";
 import { CodeBracketIcon } from "@heroicons/react/24/solid";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../../hooks/store";
+import { getExerciseState } from "../redux/submitCodeSlice";
+import { useParams } from "react-router-dom";
+import { PYTHON_LANG } from "../../../constants/constants";
 
 interface Props {
   sourcecode: string;
@@ -34,6 +39,11 @@ const CodeEditorCard = ({
   const [codeMirrorHeight, setCodeMirrorHeight] = useState<number>(0);
   const { t } = useTranslation();
 
+  const exerciseState = useAppSelector(getExerciseState);
+  const { chapter, problem } = useParams();
+  const exerciseKey = `${chapter}.${problem}`;
+  const exercise = exerciseState[exerciseKey]?.exercise || null;
+  const progLang = exercise?.language;
   useEffect(() => {
     if (codeMirrorRef.current) {
       const height = codeMirrorRef.current.getBoundingClientRect().height;
@@ -104,7 +114,7 @@ const CodeEditorCard = ({
           <CodeMirror
             height={`${codeMirrorHeight}px`}
             value={getSourcecodeDisplay()}
-            extensions={[python()]}
+            extensions={[progLang === PYTHON_LANG ? python() : cpp()]}
             onChange={onChange}
             placeholder={t("feature.submit_code.editor.placeholder")}
             readOnly={!isEditCode}
