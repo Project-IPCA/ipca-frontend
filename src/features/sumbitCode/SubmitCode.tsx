@@ -228,8 +228,9 @@ const SubmitCode = () => {
 
   useEffect(() => {
     if (jobId) {
+      const token = localStorage.getItem("access_token")
       const evtSource = new EventSource(
-        `${VITE_IPCA_RT}/submission-result/${jobId}`,
+        `${VITE_IPCA_RT}/submission-result/${jobId}?token=${token}`,
       );
 
       const entTimeOut = setTimeout(() => {
