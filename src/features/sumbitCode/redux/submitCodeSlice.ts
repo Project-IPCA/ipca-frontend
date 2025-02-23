@@ -89,6 +89,7 @@ interface Exercise {
   testcase: string;
   testcase_list: Testcase[];
   user_defined_constraints: UserConstraint;
+  language: string;
 }
 
 interface ExerciseState {
@@ -117,14 +118,14 @@ export const getExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 export const submitExercise = createAsyncThunk(
   "submitCode/sumbitExercise",
   async (
     { chapter_id, item_id, sourcecode, job_id }: SubmitExerciseRequest,
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       const response = await axiosInstance.post(`/student/exercise_submit`, {
@@ -137,7 +138,7 @@ export const submitExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const submitCodeSlice = createSlice({

@@ -132,7 +132,7 @@ const SubmitCode = () => {
 
   const onSubmitCode = async () => {
     try {
-      const response = await axiosInstance.post("/common/keyword_check", {
+      const response = await axiosInstance.post(`/common/keyword_check/${exercise?.language.toLowerCase()}`, {
         exercise_kw_list: exercise?.user_defined_constraints,
         sourcecode: sourcecode,
       });
