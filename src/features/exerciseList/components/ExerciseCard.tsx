@@ -1,11 +1,18 @@
 import { Card, Chip, Progress, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import {
-  ExerciseInfo,
-  getExercciseListStatus,
-} from "../redux/exerciseListSlice";
+import { getExercciseListStatus } from "../redux/exerciseListSlice";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../../hooks/store";
+
+interface Props {
+  chapter_id: string;
+  full_mark: number;
+  index: number;
+  is_open: boolean;
+  marking: number;
+  name: string;
+  last_exercise_success: number;
+}
 
 const ExerciseCard = ({
   index,
@@ -14,7 +21,7 @@ const ExerciseCard = ({
   full_mark,
   is_open,
   last_exercise_success,
-}: ExerciseInfo) => {
+}: Props) => {
   const navigate = useNavigate();
   const isFetching = useAppSelector(getExercciseListStatus);
   const { t } = useTranslation();

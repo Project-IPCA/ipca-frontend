@@ -32,3 +32,6 @@ export const LANGUAGE = {
 
 export const C_LANG = "C";
 export const PYTHON_LANG = "PYTHON";
+
+export const CARD_MODE = "CARD_MODE";
+export const LIST_MODE = "LIST_MODE";
