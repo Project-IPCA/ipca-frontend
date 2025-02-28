@@ -144,12 +144,18 @@
     },
     "exercise_list": {
       "search": "Search",
+      "mode": {
+        "card": "Card Mode",
+        "list": "List Mode"
+      },
       "exercise": {
         "unit": "Unit",
         "status": {
+          "label": "Status",
           "open": "Open",
           "closed": "Closed"
-        }
+        },
+        "item": "Item"
       }
     },
     "profile": {
