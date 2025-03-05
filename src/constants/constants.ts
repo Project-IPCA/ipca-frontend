@@ -35,3 +35,44 @@ export const PYTHON_LANG = "PYTHON";
 
 export const CARD_MODE = "CARD_MODE";
 export const LIST_MODE = "LIST_MODE";
+
+export const DAYS_2_LANGUAGE = [
+  {
+    en: "Monday",
+    th: "วันจันทร์",
+  },
+  {
+    en: "Tuesday",
+    th: "วันอังคาร",
+  },
+  {
+    en: "Wednesday",
+    th: "วันพุธ",
+  },
+  {
+    en: "Thursday",
+    th: "วันพฤหัสบดี",
+  },
+  {
+    en: "Friday",
+    th: "วันศุกร์",
+  },
+  {
+    en: "Saturday",
+    th: "วันเสาร์",
+  },
+  {
+    en: "Sunday",
+    th: "วันอาทิตย์",
+  },
+];
+
+export const DAY_OF_WEEK = [
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+  "SUNDAY",
+];

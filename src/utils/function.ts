@@ -1,5 +1,11 @@
 import { isAxiosError } from "axios";
-import { ALLOW_PROBLEM_TYPE, API_ERROR_RESPONSE } from "../constants/constants";
+import {
+  ALLOW_PROBLEM_TYPE,
+  API_ERROR_RESPONSE,
+  DAY_OF_WEEK,
+  DAYS_2_LANGUAGE,
+  LANGUAGE,
+} from "../constants/constants";
 import { Chapter } from "../layout/redux/submitCodeLayoutSlice";
 
 export const resolveApiError = (error: unknown): API_ERROR_RESPONSE => {
@@ -63,4 +69,20 @@ export const checkCanAccess = (chapterData: Chapter) => {
     );
   }
   return false;
+};
+
+export const getDayFromDayEnum = (day: string, lang: string) => {
+  const day2lang = DAYS_2_LANGUAGE[DAY_OF_WEEK.indexOf(day)];
+  if (!day2lang) {
+    return;
+  }
+
+  switch (lang) {
+    case LANGUAGE.th:
+      return day2lang.th;
+    case LANGUAGE.en:
+      return day2lang.en;
+    default:
+      return day2lang.en;
+  }
 };
