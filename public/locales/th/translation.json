@@ -144,12 +144,18 @@
     },
     "exercise_list": {
       "search": "ค้นหา",
+      "mode": {
+        "card": "แสดงการ์ด",
+        "list": "แสดงรายการ"
+      },
       "exercise": {
         "unit": "บทที่",
         "status": {
+          "label": "สถานะ",
           "open": "เปิดอยู่",
           "closed": "ปิดอยู่"
-        }
+        },
+        "item": "ข้อที่"
       }
     },
     "profile": {

@@ -58,6 +58,7 @@ const SubmitCode = () => {
   const submissionInitialize = useRef(false);
   const { chapter, problem } = useParams();
   const [sourcecode, setSourcecode] = useState<string>("");
+  const [isDirty, setIsDirty] = useState<boolean>(false);
   const [jobId, setJobId] = useState<string>();
   const [submissionResult, setSubmissionResult] = useState<boolean>(false);
   const [problemStepper, setProblemStepper] = useState<string>(STEPPER.problem);
@@ -70,6 +71,7 @@ const SubmitCode = () => {
   const exercise = exerciseState[exerciseKey]?.exercise || null;
   const exerciseError = exerciseState[exerciseKey]?.error || null;
   const isFetching = exerciseState[exerciseKey]?.isFetching;
+  const isSubmit = exerciseState[exerciseKey]?.isSubmit;
 
   const submissionKey = `${chapter}.${problem}`;
   const submissionHistory =
@@ -100,6 +102,10 @@ const SubmitCode = () => {
     setSourcecode(val);
   }, []);
 
+  useEffect(() => {
+    setIsDirty(sourcecode != "");
+  }, [sourcecode]);
+
   const sortedChapterList = useMemo(
     () =>
       [...chapterList].sort(
@@ -126,7 +132,7 @@ const SubmitCode = () => {
 
   const onSubmitCode = async () => {
     try {
-      const response = await axiosInstance.post("/common/keyword_check", {
+      const response = await axiosInstance.post(`/common/keyword_check/${exercise?.language.toLowerCase()}`, {
         exercise_kw_list: exercise?.user_defined_constraints,
         sourcecode: sourcecode,
       });
@@ -222,8 +228,9 @@ const SubmitCode = () => {
 
   useEffect(() => {
     if (jobId) {
+      const token = localStorage.getItem("access_token")
       const evtSource = new EventSource(
-        `${VITE_IPCA_RT}/submission-result/${jobId}`,
+        `${VITE_IPCA_RT}/submission-result/${jobId}?token=${token}`,
       );
 
       const entTimeOut = setTimeout(() => {
@@ -394,6 +401,8 @@ const SubmitCode = () => {
               isExerciseExist={!!exercise}
               canSubmit={isCanSubmit}
               isFetching={isFetching}
+              isDirty={isDirty}
+              isSubmit={isSubmit}
             />
           </Panel>
         </PanelGroup>
@@ -423,6 +432,8 @@ const SubmitCode = () => {
           isExerciseExist={!!exercise}
           canSubmit={isCanSubmit}
           isFetching={isFetching}
+          isDirty={isDirty}
+          isSubmit={isSubmit}
         />
       </div>
     </>

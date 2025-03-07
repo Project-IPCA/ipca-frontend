@@ -6,12 +6,13 @@ import { Bounce, toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { getUserIpAddressFetching } from "../userIpAddress/redux/UserIpAddress";
 import { CardBody, Typography } from "@material-tailwind/react";
+import { getDayFromDayEnum } from "../../utils/function";
 
 function HomeInfo() {
   const initialized = useRef(false);
   const dispatch = useAppDispatch();
   const { data, error } = useAppSelector((state) => state.profile);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isProfileFetching = useAppSelector(getProfileStatus);
   const isIpFetching = useAppSelector(getUserIpAddressFetching);
 
@@ -64,7 +65,7 @@ function HomeInfo() {
       />
       <InfoText
         label={t("feature.home_info.label.class_date")}
-        value={`${data.profile.group_info?.day} , ${data.profile.group_info?.time_start} - ${data.profile.group_info?.time_end}`}
+        value={`${getDayFromDayEnum(String(data.profile.group_info?.day), i18n.language)}, ${data.profile.group_info?.time_start} - ${data.profile.group_info?.time_end}`}
       />
       <div className="flex gap-2">
         <InfoText

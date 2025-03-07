@@ -89,11 +89,13 @@ interface Exercise {
   testcase: string;
   testcase_list: Testcase[];
   user_defined_constraints: UserConstraint;
+  language: string;
 }
 
 interface ExerciseState {
   exercise: Exercise | null;
   isFetching: boolean;
+  isSubmit: boolean;
   error: API_ERROR_RESPONSE | null;
 }
 
@@ -116,14 +118,14 @@ export const getExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 export const submitExercise = createAsyncThunk(
   "submitCode/sumbitExercise",
   async (
     { chapter_id, item_id, sourcecode, job_id }: SubmitExerciseRequest,
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       const response = await axiosInstance.post(`/student/exercise_submit`, {
@@ -136,7 +138,7 @@ export const submitExercise = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  },
+  }
 );
 
 const submitCodeSlice = createSlice({
@@ -150,6 +152,7 @@ const submitCodeSlice = createSlice({
         state[`${chapter_idx}.${item_id}`] = {
           exercise: null,
           isFetching: true,
+          isSubmit: false,
           error: null,
         };
       })
@@ -158,6 +161,7 @@ const submitCodeSlice = createSlice({
         state[`${chapter_idx}.${item_id}`] = {
           exercise: action.payload,
           isFetching: false,
+          isSubmit: false,
           error: null,
         };
       })
@@ -166,7 +170,26 @@ const submitCodeSlice = createSlice({
         state[`${chapter_idx}.${item_id}`] = {
           exercise: null,
           isFetching: false,
+          isSubmit: false,
           error: action.payload as API_ERROR_RESPONSE,
+        };
+      })
+      .addCase(submitExercise.pending, (state, action) => {
+        const { chapter_idx, item_id } = action.meta.arg;
+        state[`${chapter_idx}.${item_id}`] = {
+          exercise: state[`${chapter_idx}.${item_id}`].exercise,
+          isFetching: false,
+          isSubmit: true,
+          error: null,
+        };
+      })
+      .addCase(submitExercise.fulfilled, (state, action) => {
+        const { chapter_idx, item_id } = action.meta.arg;
+        state[`${chapter_idx}.${item_id}`] = {
+          exercise: state[`${chapter_idx}.${item_id}`].exercise,
+          isFetching: false,
+          isSubmit: false,
+          error: null,
         };
       })
       .addCase(submitExercise.rejected, (state, action) => {
@@ -174,6 +197,7 @@ const submitCodeSlice = createSlice({
         state[`${chapter_idx}.${item_id}`] = {
           exercise: state[`${chapter_idx}.${item_id}`].exercise,
           isFetching: false,
+          isSubmit: false,
           error: action.payload as API_ERROR_RESPONSE,
         };
       }),

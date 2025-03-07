@@ -4,13 +4,21 @@ import { resolveApiError } from "../../../utils/function";
 import { RootState } from "../../../store/store";
 import axiosInstance from "../../../utils/axios";
 
-export interface ExerciseInfo {
-  chapter_id: string;
-  full_mark: number;
-  index: number;
-  is_open: boolean;
+interface Item {
+  chapter_idx: number;
+  item_idx: number;
   marking: number;
+  is_submit: boolean;
+}
+
+export interface ExerciseInfo {
+  index: number;
+  chapter_id: string;
   name: string;
+  items: Item[];
+  total_mark: number;
+  full_mark: number;
+  is_open: boolean;
   last_exercise_success: number;
 }
 
@@ -35,7 +43,7 @@ export const getExerciseList = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(resolveApiError(error));
     }
-  }
+  },
 );
 
 const exerciseListSlice = createSlice({
